@@ -1,0 +1,19 @@
+# Secrets
+.env
+.env.*
+!.env.example
+secrets/
+*.key
+*.pem
+
+# Dependencies
+node_modules/
+
+# Generated data
+logs/
+backups/
+*.log
+
+# Local files
+.DS_Store
+Thumbs.db
