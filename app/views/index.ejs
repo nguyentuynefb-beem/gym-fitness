@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gym Fitness</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f5f8;
+      color: #172033;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    main {
+      max-width: 720px;
+      margin: auto;
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+    }
+
+    h1 { color: #2458c5; }
+
+    .count {
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+    a { color: #2458c5; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Hệ thống Quản lý Phòng Gym / Fitness</h1>
+    <p>Phiên bản đầu tiên: Express kết nối MySQL.</p>
+
+    <h2>Số hội viên trong cơ sở dữ liệu</h2>
+    <p class="count"><%= memberCount %></p>
+
+    <p><a href="/health">Kiểm tra kết nối database</a></p>
+
+    <p>
+      Chức năng quản lý hội viên, gói tập,
+      huấn luyện viên và lịch tập sẽ được bổ sung tiếp.
+    </p>
+  </main>
+</body>
+</html>
