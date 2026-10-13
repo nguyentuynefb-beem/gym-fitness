@@ -1,0 +1,173 @@
+<%- include('../layout/header', { pageTitle: 'Quản Lý Hội Viên' }) %>
+
+<div class="admin-container">
+  <div class="admin-header">
+    <div>
+      <h2><i class="fa-solid fa-users"></i> QUẢN LÝ HỘI VIÊN</h2>
+      <p style="color: var(--text-muted); font-size: 14px;">Quản lý hồ sơ, gói tập, gia hạn và trạng thái kích hoạt của khách hàng</p>
+    </div>
+    <div class="admin-actions">
+      <a href="/admin" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Quay lại Dashboard</a>
+      <button class="btn btn-primary" onclick="document.getElementById('add-member-card').scrollIntoView({ behavior: 'smooth' });">
+        <i class="fa-solid fa-user-plus"></i> Thêm Hội Viên
+      </button>
+    </div>
+  </div>
+
+  <% if (msg === 'added') { %>
+    <div class="alert alert-success"><i class="fa-solid fa-check-circle"></i> Thêm mới hội viên thành công!</div>
+  <% } else if (msg === 'updated') { %>
+    <div class="alert alert-success"><i class="fa-solid fa-check-circle"></i> Cập nhật thông tin hội viên thành công!</div>
+  <% } else if (msg === 'deleted') { %>
+    <div class="alert alert-success"><i class="fa-solid fa-trash-can"></i> Đã xóa hội viên khỏi cơ sở dữ liệu!</div>
+  <% } else if (msg === 'error') { %>
+    <div class="alert alert-danger"><i class="fa-solid fa-triangle-exclamation"></i> Có lỗi xảy ra trong thao tác. Vui lòng kiểm tra lại số điện thoại (trùng lặp).</div>
+  <% } %>
+
+  <div class="card" style="margin-bottom: 25px;">
+    <form action="/admin/members" method="GET" class="filter-form">
+      <div class="filter-inputs">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" name="q" class="form-control" placeholder="Tìm theo tên, số điện thoại, email..." value="<%= searchQuery %>">
+        </div>
+        <select name="status" class="form-control" style="width: auto;">
+          <option value="">-- Tất cả trạng thái --</option>
+          <option value="active" <%= selectedStatus === 'active' ? 'selected' : '' %>>Đang hoạt động</option>
+          <option value="pending" <%= selectedStatus === 'pending' ? 'selected' : '' %>>Chờ kích hoạt / Tập thử</option>
+          <option value="expired" <%= selectedStatus === 'expired' ? 'selected' : '' %>>Đã hết hạn</option>
+        </select>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-filter"></i> Lọc</button>
+        <% if (searchQuery || selectedStatus) { %>
+          <a href="/admin/members" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Đặt lại</a>
+        <% } %>
+      </div>
+    </form>
+  </div>
+
+  <div class="card" style="margin-bottom: 30px;">
+    <div class="card-header">
+      <h3><i class="fa-solid fa-address-book"></i> Danh Sách Hội Viên (<%= members.length %>)</h3>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Mã</th>
+            <th>Họ và Tên</th>
+            <th>Số Điện Thoại</th>
+            <th>Gói Tập</th>
+            <th>Thời Hạn Gói</th>
+            <th>Trạng Thái</th>
+            <th>Ghi Chú</th>
+            <th>Thao Tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (members.length === 0) { %>
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                Không tìm thấy hội viên nào phù hợp.
+              </td>
+            </tr>
+          <% } %>
+          <% members.forEach(m => { %>
+            <tr>
+              <td>#<%= m.id %></td>
+              <td style="font-weight: 700; color: var(--text-primary);"><%= m.full_name %></td>
+              <td><%= m.phone %></td>
+              <td><%= m.package_name || 'Tập thử 7 ngày' %></td>
+              <td>
+                <%= m.start_date ? String(m.start_date).slice(0, 10) : '' %> ~ <%= m.end_date ? String(m.end_date).slice(0, 10) : '' %>
+              </td>
+              <td>
+                <span class="badge badge-<%= m.status %>">
+                  <%= m.status === 'active' ? 'Hoạt động' : (m.status === 'pending' ? 'Chờ kích hoạt' : 'Hết hạn') %>
+                </span>
+              </td>
+              <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= m.notes || '-' %></td>
+              <td style="white-space: nowrap;">
+                <form action="/admin/members/delete/<%= m.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa hội viên này?');">
+                  <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">
+                    <i class="fa-solid fa-trash"></i> Xóa
+                  </button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="add-member-card" class="card">
+    <div class="card-header">
+      <h3><i class="fa-solid fa-user-plus"></i> Thêm Hội Viên Mới</h3>
+    </div>
+    <form action="/admin/members/add" method="POST" class="admin-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Họ và Tên (*)</label>
+          <input type="text" name="full_name" class="form-control" placeholder="Nguyễn Văn B" required>
+        </div>
+        <div class="form-group">
+          <label>Số Điện Thoại (*)</label>
+          <input type="tel" name="phone" class="form-control" placeholder="0987654321" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" class="form-control" placeholder="member@gmail.com">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Giới Tính</label>
+          <select name="gender" class="form-control">
+            <option value="male">Nam</option>
+            <option value="female">Nữ</option>
+            <option value="other">Khác</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Gói Tập</label>
+          <select name="package_id" class="form-control">
+            <option value="">-- Chọn gói tập --</option>
+            <% packages.forEach(p => { %>
+              <option value="<%= p.id %>"><%= p.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Trạng Thái</label>
+          <select name="status" class="form-control">
+            <option value="active">Hoạt động (Active)</option>
+            <option value="pending">Chờ kích hoạt (Pending)</option>
+            <option value="expired">Đã hết hạn (Expired)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ngày Bắt Đầu (*)</label>
+          <input type="date" name="start_date" class="form-control" value="2026-10-13" required>
+        </div>
+        <div class="form-group">
+          <label>Ngày Kết Thúc (*)</label>
+          <input type="date" name="end_date" class="form-control" value="2026-11-13" required>
+        </div>
+        <div class="form-group">
+          <label>Ghi Chú</label>
+          <input type="text" name="notes" class="form-control" placeholder="Khách hàng quen, ưu tiên ca tối...">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+        <i class="fa-solid fa-floppy-disk"></i> Lưu Thông Tin Hội Viên
+      </button>
+    </form>
+  </div>
+</div>
+
+<%- include('../layout/footer') %>
