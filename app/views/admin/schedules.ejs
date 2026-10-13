@@ -1,0 +1,163 @@
+<%- include('../layout/header', { pageTitle: 'Lịch Đặt Tập' }) %>
+
+<div class="admin-container">
+  <div class="admin-header">
+    <div>
+      <h2><i class="fa-solid fa-calendar-days"></i> QUẢN LÝ LỊCH TẬP</h2>
+      <p style="color: var(--text-muted); font-size: 14px;">Điều phối ca tập, phân bổ HLV phụ trách và quản lý trạng thái buổi tập</p>
+    </div>
+    <div class="admin-actions">
+      <a href="/admin" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Quay lại Dashboard</a>
+      <button class="btn btn-primary" onclick="document.getElementById('add-schedule-card').scrollIntoView({ behavior: 'smooth' });">
+        <i class="fa-solid fa-calendar-plus"></i> Đặt Lịch Tập Mới
+      </button>
+    </div>
+  </div>
+
+  <% if (msg === 'added') { %>
+    <div class="alert alert-success"><i class="fa-solid fa-check-circle"></i> Đặt lịch tập thành công!</div>
+  <% } else if (msg === 'updated') { %>
+    <div class="alert alert-success"><i class="fa-solid fa-check-circle"></i> Cập nhật trạng thái lịch tập thành công!</div>
+  <% } else if (msg === 'deleted') { %>
+    <div class="alert alert-success"><i class="fa-solid fa-trash-can"></i> Đã xóa buổi tập thành công!</div>
+  <% } else if (msg === 'error') { %>
+    <div class="alert alert-danger"><i class="fa-solid fa-triangle-exclamation"></i> Có lỗi xảy ra trong quá trình xử lý.</div>
+  <% } %>
+
+  <div class="card" style="margin-bottom: 30px;">
+    <div class="card-header">
+      <h3><i class="fa-solid fa-clock-rotate-left"></i> Danh Sách Lịch Tập (<%= schedules.length %>)</h3>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Mã</th>
+            <th>Ngày Tập</th>
+            <th>Khung Giờ</th>
+            <th>Hội Viên</th>
+            <th>Huấn Luyện Viên</th>
+            <th>Bộ Môn</th>
+            <th>Trạng Thái</th>
+            <th>Ghi Chú</th>
+            <th>Hành Động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (schedules.length === 0) { %>
+            <tr>
+              <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                Chưa có lịch tập nào được ghi nhận.
+              </td>
+            </tr>
+          <% } %>
+          <% schedules.forEach(s => { %>
+            <tr>
+              <td>#<%= s.id %></td>
+              <td><strong><%= String(s.session_date).slice(0, 10) %></strong></td>
+              <td><span class="badge" style="background: rgba(255, 107, 0, 0.15); color: var(--primary);"><%= s.time_slot %></span></td>
+              <td style="font-weight: 700; color: var(--text-primary);"><%= s.member_name %> (<%= s.member_phone %>)</td>
+              <td><%= s.trainer_name || 'Tự tập cá nhân' %></td>
+              <td><%= s.workout_type %></td>
+              <td>
+                <span class="badge badge-<%= s.status %>">
+                  <%= s.status === 'scheduled' ? 'Sắp tới' : (s.status === 'completed' ? 'Đã hoàn thành' : 'Đã hủy') %>
+                </span>
+              </td>
+              <td><%= s.notes || '-' %></td>
+              <td style="white-space: nowrap;">
+                <% if (s.status === 'scheduled') { %>
+                  <form action="/admin/schedules/status/<%= s.id %>" method="POST" style="display: inline;">
+                    <input type="hidden" name="status" value="completed">
+                    <button type="submit" class="btn btn-primary" style="padding: 4px 8px; font-size: 11px;">
+                      <i class="fa-solid fa-check"></i> Xong
+                    </button>
+                  </form>
+                  <form action="/admin/schedules/status/<%= s.id %>" method="POST" style="display: inline;">
+                    <input type="hidden" name="status" value="cancelled">
+                    <button type="submit" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;">
+                      <i class="fa-solid fa-xmark"></i> Hủy
+                    </button>
+                  </form>
+                <% } %>
+                <form action="/admin/schedules/delete/<%= s.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa lịch tập này?');">
+                  <button type="submit" class="btn btn-danger" style="padding: 4px 8px; font-size: 11px;">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="add-schedule-card" class="card">
+    <div class="card-header">
+      <h3><i class="fa-solid fa-calendar-plus"></i> Đặt Lịch Tập Mới</h3>
+    </div>
+    <form action="/admin/schedules/add" method="POST" class="admin-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Hội Viên (*)</label>
+          <select name="member_id" class="form-control" required>
+            <option value="">-- Chọn hội viên --</option>
+            <% members.forEach(m => { %>
+              <option value="<%= m.id %>"><%= m.full_name %> - <%= m.phone %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Huấn Luyện Viên Phụ Trách</label>
+          <select name="trainer_id" class="form-control">
+            <option value="">-- Không có (Tự tập cá nhân) --</option>
+            <% trainers.forEach(t => { %>
+              <option value="<%= t.id %>"><%= t.full_name %> (<%= t.specialty %>)</option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ngày Tập (*)</label>
+          <input type="date" name="session_date" class="form-control" value="2026-10-14" required>
+        </div>
+        <div class="form-group">
+          <label>Khung Giờ (*)</label>
+          <select name="time_slot" class="form-control" required>
+            <option value="06:00 - 07:30">06:00 - 07:30 (Sáng sớm)</option>
+            <option value="08:00 - 09:30">08:00 - 09:30 (Sáng)</option>
+            <option value="10:00 - 11:30">10:00 - 11:30 (Trưa)</option>
+            <option value="14:00 - 15:30">14:00 - 15:30 (Đầu giờ chiều)</option>
+            <option value="16:00 - 17:30">16:00 - 17:30 (Chiều)</option>
+            <option value="18:00 - 19:30" selected>18:00 - 19:30 (Tối cao điểm)</option>
+            <option value="19:30 - 21:00">19:30 - 21:00 (Tối muộn)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Bộ Môn Tập Luyện</label>
+          <select name="workout_type" class="form-control">
+            <option value="Gym & Thể hình">Gym & Thể hình</option>
+            <option value="Yoga trị liệu">Yoga trị liệu</option>
+            <option value="Boxing & Kickfit">Boxing & Kickfit</option>
+            <option value="Cardio giảm mỡ">Cardio giảm mỡ</option>
+            <option value="Phục hồi chức năng">Phục hồi chức năng</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Ghi Chú Yêu Cầu Riêng</label>
+        <input type="text" name="notes" class="form-control" placeholder="Cần khởi động kỹ khớp gối, hướng dẫn máy chạy mới...">
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+        <i class="fa-solid fa-floppy-disk"></i> Xác Nhận Đặt Lịch
+      </button>
+    </form>
+  </div>
+</div>
+
+<%- include('../layout/footer') %>
