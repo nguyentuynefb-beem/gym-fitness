@@ -2,6 +2,8 @@ FROM node:24-alpine
 
 WORKDIR /app
 
+RUN mkdir -p /var/log/app && chown -R node:node /var/log/app
+
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 

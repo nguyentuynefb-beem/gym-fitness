@@ -13,36 +13,37 @@
 
 ## 2. Kiến trúc hệ thống & Mạng (Network Architecture)
 
-Hệ thống được thiết kế theo mô hình kiến trúc phân lớp an toàn (Defense in Depth) kết hợp cụm giám sát tập trung Prometheus & Grafana:
+Hệ thống được thiết kế theo mô hình kiến trúc phân lớp an toàn (Defense in Depth) kết hợp bộ đôi cụm giám sát **Prometheus + Grafana** và cụm log tập trung **Loki + Promtail**:
 
 ```
 [ Khách hàng / Quản trị viên ]               [ Kỹ sư Quản trị / Giám sát ]
              │                                              │
              │ (Cổng 80: Redirect -> 443)                   │ (Cổng 3001: Grafana UI)
              │ (Cổng 443: HTTPS Ingress)                    │ (Cổng 9090: Prometheus UI)
+             │                                              │ (Cổng 3100: Loki API)
              ▼                                              ▼
     ┌─────────────────┐                            ┌─────────────────┐
     │  Nginx Gateway  │ (Image: nginx:1.27-alpine) │   Grafana 11.2  │ (Port 3001)
     └────────┬────────┘                            └────────┬────────┘
-             │                                              │ (Truy vấn metrics)
-             │ (Mạng nội bộ 'frontend')                     ▼
-             ├───────────────────────┬─────────────▶┌─────────────────┐
-             │                       │              │ Prometheus 2.54 │ (Port 9090)
-             ▼                       ▼              └────────┬────────┘
-    ┌─────────────────┐     ┌─────────────────┐              │ (Scrape metrics)
-    │   Node.js App   │     │   phpMyAdmin    │              ├─────────────────┐
-    │  (Titan Fitness)│     │  (Cổng web DB)  │              │                 │
-    │  (User: node)   │     │ (Subpath /pma/) │              ▼                 ▼
-    │ (/metrics:3000) │     └────────┬────────┘     ┌─────────────────┐ ┌───────────────┐
-    └────────┬────────┘              │              │ Nginx Exporter  │ │    cAdvisor   │
-             │                       │              │   (Cổng 9113)   │ │  (Cổng 8080)  │
-             │ (Mạng nội bộ 'backend' - Cô lập)     └─────────────────┘ └───────────────┘
-             └───────────────────────┼──────────────┐        │ (Mạng nội bộ 'backend')
-                                     ▼              ▼        ▼
-                            ┌─────────────────┐    ┌───────────────────┐
-                            │  MySQL 8.4 DB   │◀───│  mysqld-exporter  │
-                            │    (gym_db)     │    │    (Cổng 9104)    │
-                            └─────────────────┘    └───────────────────┘
+             │                                              │ (Truy vấn metrics & logs)
+             │ (Mạng nội bộ 'frontend')                     ├────────────────────────┐
+             ├───────────────────────┬─────────────▶┌───────▼─────────┐      ┌───────▼─────────┐
+             │                       │              │ Prometheus 2.54 │      │    Loki 3.1     │
+             ▼                       ▼              └────────┬────────┘      │   (Cổng 3100)   │
+    ┌─────────────────┐     ┌─────────────────┐              │ (Metrics)     └───────▲─────────┘
+    │   Node.js App   │     │   phpMyAdmin    │              ├────────┐              │ (Push logs)
+    │  (Titan Fitness)│     │  (Cổng web DB)  │              │        │              │
+    │  (User: node)   │     │ (Subpath /pma/) │              ▼        ▼              │
+    │ (/metrics:3000) │     └────────┬────────┘     ┌─────────┐ ┌──────────┐ ┌───────┴─────────┐
+    └────────┬────────┘              │              │  Nginx  │ │ cAdvisor │ │    Promtail     │
+             │                       │              │Exporter │ │  (8080)  │ │   (Log Shipper) │
+             │ (Mạng nội bộ 'backend' - Cô lập)     └─────────┘ └──────────┘ └───────▲─────────┘
+             └───────────────────────┼──────────────┐        │                       │
+                                     ▼              ▼        ▼ (Mạng backend)        ├────────────────┐
+                            ┌─────────────────┐    ┌───────────────────┐             │ (Đọc file log) │
+                            │  MySQL 8.4 DB   │◀───│  mysqld-exporter  │             ▼                ▼
+                            │    (gym_db)     │    │    (Cổng 9104)    │      [ app_logs ]     [ nginx_logs ]
+                            └─────────────────┘    └───────────────────┘       (/var/log/app)   (/var/log/nginx)
 ```
 
 ---
@@ -111,14 +112,32 @@ docker compose ps
 | **Quản lý Huấn luyện viên** | `https://localhost/admin/trainers` | Danh sách PT, chuyên môn, kinh nghiệm |
 | **Quản lý Lịch tập** | `https://localhost/admin/schedules` | Xếp lịch tập theo khung giờ và phòng tập |
 | **Công cụ Quản trị CSDL (phpMyAdmin)** | `https://localhost/pma/` | Đăng nhập bằng `gym_app` hoặc `root` |
-| **Hệ thống Giám sát Grafana** | `http://localhost:3001` | **Tài khoản:** `admin` / `admin` (Đã nạp sẵn 4 Dashboards) |
+| **Hệ thống Giám sát Grafana** | `http://localhost:3001` | **Tài khoản:** `admin` / `admin` (5 Dashboards sẵn có) |
+| **Dashboard Log tập trung (Loki)** | `http://localhost:3001/d/titan-gym-loki-logs/centralized-logging-loki-promtail` | Giám sát stream log trực tiếp và phân tích lỗi |
 | **Máy chủ Thu thập Prometheus** | `http://localhost:9090` | Xem danh sách Target tại `/targets` (Tất cả UP) |
+| **Máy chủ Log tập trung Loki** | `http://localhost:3100/ready` | Trả về trạng thái `ready` của Loki engine |
 | **Healthcheck Gateway (Nginx)** | `https://localhost/health` | Trả về trạng thái UP của Nginx |
 | **Metrics Nginx (Stub Status)** | `https://localhost/stub_status` | Phục vụ Nginx Exporter cào dữ liệu |
 
 ---
 
-## 6. Lịch sử tiến độ thực hiện đề tài
+## 6. Danh sách các câu truy vấn LogQL mẫu (Tiêu chí 5)
+
+Hệ thống hỗ trợ đầy đủ cú pháp LogQL trên Grafana (Tab **Explore** ➔ Chọn DataSource **Loki**):
+
+| Mục đích truy vấn | Câu lệnh LogQL |
+| :--- | :--- |
+| **1. Xem toàn bộ log hệ thống** | `{job=~"nginx|gym-app"}` |
+| **2. Xem log JSON ứng dụng Node.js** | `{job="gym-app"} \| json` |
+| **3. Lọc log cảnh báo / lỗi 404** | `{job="gym-app"} \| json \| level="warn"` |
+| **4. Lọc log lỗi hệ thống (HTTP 500)** | `{job="gym-app"} \| json \| level="error"` |
+| **5. Xem log truy cập Nginx** | `{job="nginx", log_type="access"}` |
+| **6. Lọc các request lỗi từ Nginx** | `{job="nginx"} \| status >= 400` |
+| **7. Đếm tốc độ log theo job (Metrics)** | `sum by (job) (rate({job=~"nginx|gym-app"}[1m]))` |
+
+---
+
+## 7. Lịch sử tiến độ thực hiện đề tài
 
 - **Ngày 1 (`feature/day01-database-schema`)**:
   - Thiết kế Schema CSDL MySQL 8.4 chuẩn hóa (`db/init/001-schema.sql`).
@@ -134,10 +153,13 @@ docker compose ps
   - Áp dụng các chính sách Hardening: Network Isolation, đóng cổng host trực tiếp, Non-root App container, bộ Security Headers chuẩn.
   - Cấu hình reverse proxy cho phpMyAdmin (`/pma/`) và Nginx metrics (`/stub_status`).
 - **Ngày 4 (`feature/day04-monitoring-prometheus-grafana`)**:
-  - Tích hợp thư viện `prom-client` vào ứng dụng Node.js, cung cấp endpoint `/metrics` chuẩn Prometheus (HTTP request duration, status codes, memory/CPU).
-  - Triển khai `mysqld-exporter:v0.15.1` kết nối an toàn trong mạng nội bộ `backend` để giám sát MySQL (connections, queries, buffer pool).
-  - Triển khai `nginx-prometheus-exporter:1.3.0` cào lưu lượng từ `/stub_status` của Nginx Gateway.
-  - Triển khai `cAdvisor:v0.49.1` giám sát mức sử dụng CPU/RAM/Network của toàn bộ containers.
+  - Tích hợp thư viện `prom-client` vào ứng dụng Node.js, cung cấp endpoint `/metrics` chuẩn Prometheus.
+  - Triển khai `mysqld-exporter:v0.15.1`, `nginx-prometheus-exporter:1.3.0`, `cAdvisor:v0.49.1`.
   - Cấu hình Prometheus 2.54 tự động scrape 5 targets với trạng thái UP 100%.
-  - Tự động hóa hoàn toàn Grafana 11.2 (Provisioning) với Datasource Prometheus và 4 Dashboards chi tiết: Web Application, MySQL Database, Nginx Gateway, Docker Containers.
-  - Xuất báo cáo nghiệm thu [day04-verification.txt](docs/evidence/day04-verification.txt).
+  - Tự động hóa hoàn toàn Grafana 11.2 (Provisioning) với Datasource Prometheus và 4 Dashboards chi tiết.
+- **Ngày 5 (`feature/day05-logging-loki-promtail`)**:
+  - Triển khai hệ thống ghi log tập trung Grafana **Loki 3.1** và **Promtail 3.1**.
+  - Thiết lập luồng log kép cho Web App (Stdout + JSON File tại volume `app_logs`).
+  - Thu thập và phân tích Nginx Access/Error logs (volume `nginx_logs`) với pipeline trích xuất status, method, latency.
+  - Tự động nạp Loki DataSource và Dashboard `Centralized Logging (Loki & Promtail)` vào Grafana.
+  - Xây dựng và nghiệm thu 7 câu lệnh LogQL mẫu, xuất báo cáo [day05-verification.txt](docs/evidence/day05-verification.txt).

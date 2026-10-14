@@ -1,0 +1,72 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+  log_level: info
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+    backoff_config:
+      min_period: 100ms
+      max_period: 10s
+      max_retries: 10
+    timeout: 10s
+
+scrape_configs:
+  # 1. Nginx Ingress Access Logs
+  - job_name: nginx-access
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          service: gym-nginx-ingress
+          log_type: access
+          __path__: /var/log/nginx/ingress_access.log
+    pipeline_stages:
+      - regex:
+          expression: '^(?P<remote_addr>[\w\.\:]+) - (?P<remote_user>[^ ]*) \[(?P<time_local>[^\]]+)\] "(?P<method>\S+) (?P<request_uri>\S+) (?P<http_version>[^"]*)" (?P<status>\d+) (?P<body_bytes_sent>\d+) "(?P<http_referer>[^"]*)" "(?P<http_user_agent>[^"]*)" "(?P<http_x_forwarded_for>[^"]*)" rt=(?P<request_time>[\d\.-]+)'
+      - labels:
+          status:
+          method:
+      - timestamp:
+          source: time_local
+          format: '02/Jan/2006:15:04:05 -0700'
+
+  # 2. Nginx Ingress Error Logs
+  - job_name: nginx-error
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          service: gym-nginx-ingress
+          log_type: error
+          level: error
+          __path__: /var/log/nginx/ingress_error.log
+
+  # 3. Titan Fitness Node.js Web App Structured JSON Logs
+  - job_name: gym-app
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: gym-app
+          service: gym-fitness-app
+          __path__: /var/log/app/*.log
+    pipeline_stages:
+      - json:
+          expressions:
+            level: level
+            event: event
+            method: method
+            path: path
+            status: status
+            duration_ms: duration_ms
+      - labels:
+          level:
+          method:
+          status:
+          event:
