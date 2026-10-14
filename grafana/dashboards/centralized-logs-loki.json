@@ -22,11 +22,11 @@
       "type": "stat",
       "datasource": {
         "type": "loki",
-        "uid": "Loki"
+        "uid": "loki"
       },
       "targets": [
         {
-          "expr": "sum(count_over_time({job=~\"nginx|gym-app\"}[1h]))",
+          "expr": "sum(count_over_time({job=~\"nginx|gym-app\"}[1h])) or vector(0)",
           "legendFormat": "Total Logs",
           "refId": "A"
         }
@@ -57,16 +57,16 @@
         "y": 0
       },
       "id": 2,
-      "title": "Web App Error Logs (1h)",
+      "title": "Web App Warnings & Errors (1h)",
       "type": "stat",
       "datasource": {
         "type": "loki",
-        "uid": "Loki"
+        "uid": "loki"
       },
       "targets": [
         {
-          "expr": "sum(count_over_time({job=\"gym-app\"} |= \"error\" [1h]))",
-          "legendFormat": "App Errors",
+          "expr": "sum(count_over_time({job=\"gym-app\"} | json | level=~\"error|warn\" [1h])) or vector(0)",
+          "legendFormat": "App Warnings/Errors",
           "refId": "A"
         }
       ],
@@ -80,8 +80,12 @@
                 "value": null
               },
               {
-                "color": "red",
+                "color": "yellow",
                 "value": 1
+              },
+              {
+                "color": "red",
+                "value": 10
               }
             ]
           }
@@ -101,11 +105,11 @@
       "type": "stat",
       "datasource": {
         "type": "loki",
-        "uid": "Loki"
+        "uid": "loki"
       },
       "targets": [
         {
-          "expr": "sum(count_over_time({job=\"nginx\"} | status >= 400 [1h]))",
+          "expr": "sum(count_over_time({job=\"nginx\"} | status >= 400 [1h])) or vector(0)",
           "legendFormat": "HTTP 4xx/5xx",
           "refId": "A"
         }
@@ -145,11 +149,11 @@
       "type": "stat",
       "datasource": {
         "type": "loki",
-        "uid": "Loki"
+        "uid": "loki"
       },
       "targets": [
         {
-          "expr": "count(count_over_time({job=~\"nginx|gym-app\"}[1m]))",
+          "expr": "count(count_over_time({job=~\"nginx|gym-app\"}[1h])) or vector(0)",
           "legendFormat": "Streams",
           "refId": "A"
         }
@@ -181,11 +185,11 @@
       "type": "timeseries",
       "datasource": {
         "type": "loki",
-        "uid": "Loki"
+        "uid": "loki"
       },
       "targets": [
         {
-          "expr": "sum by (job) (rate({job=~\"nginx|gym-app\"}[1m]))",
+          "expr": "sum by (job) (rate({job=~\"nginx|gym-app\"}[$__interval]))",
           "legendFormat": "Job: {{job}}",
           "refId": "A"
         }
@@ -214,11 +218,11 @@
       "type": "timeseries",
       "datasource": {
         "type": "loki",
-        "uid": "Loki"
+        "uid": "loki"
       },
       "targets": [
         {
-          "expr": "sum by (status) (count_over_time({job=\"nginx\"} [1m]))",
+          "expr": "sum by (status) (count_over_time({job=\"nginx\"}[$__interval]))",
           "legendFormat": "Status {{status}}",
           "refId": "A"
         }
@@ -236,7 +240,7 @@
     {
       "collapsed": false,
       "gridPos": {
-        "h": 10,
+        "h": 12,
         "w": 12,
         "x": 0,
         "y": 11
@@ -246,11 +250,11 @@
       "type": "logs",
       "datasource": {
         "type": "loki",
-        "uid": "Loki"
+        "uid": "loki"
       },
       "targets": [
         {
-          "expr": "{job=\"gym-app\"} | json",
+          "expr": "{job=\"gym-app\"}",
           "legendFormat": "",
           "refId": "A"
         }
@@ -268,7 +272,7 @@
     {
       "collapsed": false,
       "gridPos": {
-        "h": 10,
+        "h": 12,
         "w": 12,
         "x": 12,
         "y": 11
@@ -278,7 +282,7 @@
       "type": "logs",
       "datasource": {
         "type": "loki",
-        "uid": "Loki"
+        "uid": "loki"
       },
       "targets": [
         {
@@ -308,7 +312,7 @@
     "logs"
   ],
   "time": {
-    "from": "now-30m",
+    "from": "now-1h",
     "to": "now"
   },
   "title": "Centralized Logging (Loki & Promtail)",
