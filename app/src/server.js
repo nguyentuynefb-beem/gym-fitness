@@ -3,6 +3,7 @@ const path = require('path');
 const pool = require('./db');
 const homeRouter = require('./routes/home');
 const adminRouter = require('./routes/admin');
+const { client, metricsMiddleware } = require('./metrics');
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -19,12 +20,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Prometheus Metrics Middleware (Tiêu chí 4)
+app.use(metricsMiddleware);
+
 // Request logging (JSON formatted for Promtail/Loki)
 app.use((req, res, next) => {
   const start = Date.now();
   res.on('finish', () => {
     const duration = Date.now() - start;
-    if (req.path !== '/health') {
+    if (req.path !== '/health' && req.path !== '/metrics') {
       console.log(JSON.stringify({
         level: 'info',
         event: 'http_request',
@@ -37,6 +41,21 @@ app.use((req, res, next) => {
     }
   });
   next();
+});
+
+// Metrics endpoint for Prometheus (Tiêu chí 4)
+app.get('/metrics', async (req, res) => {
+  try {
+    res.set('Content-Type', client.register.contentType);
+    res.end(await client.register.metrics());
+  } catch (error) {
+    console.error(JSON.stringify({
+      level: 'error',
+      event: 'metrics_error',
+      message: error.message
+    }));
+    res.status(500).send('Error collecting metrics');
+  }
 });
 
 // Mount Routes

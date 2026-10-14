@@ -1,0 +1,66 @@
+==================================================
+VERIFICATION REPORT: DAY 04 - PROMETHEUS & GRAFANA MONITORING
+Date: 10/14/2026 17:59:40
+==================================================
+
+1. DOCKER COMPOSE FULL STACK STATUS:
+NAME                            IMAGE                                   COMMAND                  SERVICE           CREATED          STATUS                    PORTS
+gym-fitness-app-1               gym-fitness-app                         "docker-entrypoint.s…"   app               16 minutes ago   Up 15 minutes (healthy)   3000/tcp
+gym-fitness-cadvisor-1          gcr.io/cadvisor/cadvisor:v0.49.1        "/usr/bin/cadvisor -…"   cadvisor          6 minutes ago    Up 5 minutes (healthy)    8080/tcp
+gym-fitness-grafana-1           grafana/grafana:11.2.0                  "/run.sh"                grafana           14 minutes ago   Up 13 minutes (healthy)   0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp
+gym-fitness-mysql-1             mysql:8.4                               "docker-entrypoint.s…"   mysql             19 hours ago     Up 2 hours (healthy)      3306/tcp, 33060/tcp
+gym-fitness-mysqld-exporter-1   prom/mysqld-exporter:v0.15.1            "/bin/mysqld_exporte…"   mysqld-exporter   11 minutes ago   Up 10 minutes             9104/tcp
+gym-fitness-nginx-1             nginx:1.27-alpine                       "/docker-entrypoint.…"   nginx             16 minutes ago   Up 14 minutes (healthy)   0.0.0.0:80->80/tcp, [::]:80->80/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp
+gym-fitness-nginx-exporter-1    nginx/nginx-prometheus-exporter:1.3.0   "/usr/bin/nginx-prom…"   nginx-exporter    15 minutes ago   Up 13 minutes             9113/tcp
+gym-fitness-phpmyadmin-1        phpmyadmin:5.2-apache                   "/docker-entrypoint.…"   phpmyadmin        7 hours ago      Up 2 hours                80/tcp
+gym-fitness-prometheus-1        prom/prometheus:v2.54.1                 "/bin/prometheus --c…"   prometheus        15 minutes ago   Up 14 minutes (healthy)   0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp
+
+
+2. PROMETHEUS SCRAPE TARGETS (http://localhost:9090/targets):
+  * Job: cadvisor        | Status: UP     | URL: http://cadvisor:8080/metrics                  | Error: none
+  * Job: gym-app         | Status: UP     | URL: http://app:3000/metrics                       | Error: none
+  * Job: mysql           | Status: UP     | URL: http://mysqld-exporter:9104/metrics           | Error: none
+  * Job: nginx           | Status: UP     | URL: http://nginx-exporter:9113/metrics            | Error: none
+  * Job: prometheus      | Status: UP     | URL: http://localhost:9090/metrics                 | Error: none
+
+3. PROMETHEUS COLLECTED METRICS (SAMPLES):
+  [Metric] App HTTP Requests Total:
+    - {} => 92
+  [Metric] App Requests by Route:
+    - {'route': '/'} => 16
+    - {'route': '/admin/'} => 16
+    - {'route': '/admin/members'} => 15
+    - {'route': '/admin/packages'} => 15
+  [Metric] App Process Heap Memory (MB):
+    - {'env': 'production', 'instance': 'app:3000', 'job': 'gym-app', 'service': 'gym-web-app'} => 15.156486511230469
+  [Metric] MySQL Client Connections:
+    - {'__name__': 'mysql_global_status_threads_connected', 'env': 'production', 'instance': 'mysqld-exporter:9104', 'job': 'mysql', 'service': 'gym-mysql-db'} => 2
+  [Metric] MySQL Queries Per Second:
+  [Metric] Nginx HTTP Requests Total:
+    - {'__name__': 'nginx_http_requests_total', 'env': 'production', 'instance': 'nginx-exporter:9113', 'job': 'nginx', 'service': 'gym-nginx-ingress'} => 244
+  [Metric] Nginx Active Connections:
+    - {'__name__': 'nginx_connections_active', 'env': 'production', 'instance': 'nginx-exporter:9113', 'job': 'nginx', 'service': 'gym-nginx-ingress'} => 1
+  [Metric] cAdvisor Monitored Slices/Containers:
+    - {} => 33
+
+4. GRAFANA DATASOURCE & AUTO-PROVISIONED DASHBOARDS (http://localhost:3001):
+  Data Sources:
+    * Prometheus (Type: prometheus, URL: http://prometheus:9090, Default: True)
+  Dashboards:
+    * Docker Containers Resource Overview (Folder: Titan Fitness Monitoring, UID: titan-gym-cadvisor, URL: /d/titan-gym-cadvisor/docker-containers-resource-overview)
+    * MySQL Database Performance (Folder: Titan Fitness Monitoring, UID: titan-gym-mysql, URL: /d/titan-gym-mysql/mysql-database-performance)
+    * Nginx Gateway Ingress Metrics (Folder: Titan Fitness Monitoring, UID: titan-gym-nginx, URL: /d/titan-gym-nginx/nginx-gateway-ingress-metrics)
+    * Titan Fitness - Web Application Metrics (Folder: Titan Fitness Monitoring, UID: titan-gym-web-app, URL: /d/titan-gym-web-app/titan-fitness-web-application-metrics)
+
+5. SYSTEM HEALTH ENDPOINTS STATUS:
+  * Nginx Healthz (HTTP 80): HTTP 200 - healthy
+  * Nginx Health (HTTPS 443): HTTP 200 - {"status":"UP","gateway":"nginx"}
+  * Prometheus Healthy (Port 9090): HTTP 200 - Prometheus Server is Healthy.
+  * Grafana Health (Port 3001): HTTP 200 - {
+  "database": "ok",
+  "version": "11.2.0",
+  "commit": "2a88694fd3ced0335bf372
+
+==================================================
+CONCLUSION: ALL MONITORING TARGETS & DASHBOARDS OPERATIONAL
+==================================================
