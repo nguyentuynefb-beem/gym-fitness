@@ -1,0 +1,174 @@
+<%- include('layout/header', { pageTitle: 'Trang Chủ' }) %>
+
+<header class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><i class="fa-solid fa-fire"></i> Trung Tâm Thể Hình & Fitness Đẳng Cấp</div>
+    <h1>BỨT PHÁ GIỚI HẠN<br><span class="highlight">CHINH PHỤC VÓC DÁNG</span></h1>
+    <p>Trang thiết bị chuẩn quốc tế, đội ngũ huấn luyện viên chuyên nghiệp hàng đầu cùng không gian tập luyện truyền cảm hứng mạnh mẽ.</p>
+    <div class="hero-actions">
+      <a href="#trial-form" class="btn btn-primary"><i class="fa-solid fa-bolt"></i> Nhận 7 Ngày Tập Thử Miễn Phí</a>
+      <a href="#packages" class="btn btn-outline"><i class="fa-solid fa-tags"></i> Xem Bảng Giá Gói Tập</a>
+    </div>
+  </div>
+</header>
+
+<section class="stats-section">
+  <div class="container stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+      <div class="stat-num"><%= stats.activeMembers %></div>
+      <div class="stat-label">Hội Viên Đang Hoạt Động</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fa-solid fa-medal"></i></div>
+      <div class="stat-num"><%= stats.totalTrainers %></div>
+      <div class="stat-label">Huấn Luyện Viên Chuẩn Quốc Tế</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fa-solid fa-dumbbell"></i></div>
+      <div class="stat-num"><%= stats.totalPackages %></div>
+      <div class="stat-label">Gói Tập Đa Dạng & Linh Hoạt</div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>VÌ SAO CHỌN <span class="highlight">TITAN FITNESS</span></h2>
+      <p>Trải nghiệm dịch vụ tập luyện toàn diện với chuẩn mực chất lượng cao nhất</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+        <h3>Máy Tập Hiện Đại</h3>
+        <p>100% thiết bị nhập khẩu từ các thương hiệu hàng đầu thế giới như Life Fitness, Hammer Strength.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-user-ninja"></i></div>
+        <h3>HLV Chuyên Nghiệp</h3>
+        <p>Đội ngũ HLV có chứng chỉ quốc tế NASM, ACE, tận tâm định hướng giáo án riêng cho từng thể trạng.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-spa"></i></div>
+        <h3>Tiện Ích 5 Sao</h3>
+        <p>Phòng tắm nóng lạnh, xông hơi Sauna đá muối, tủ khóa locker thông minh và khu đo InBody miễn phí.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="packages" class="section section-dark">
+  <div class="container">
+    <div class="section-title">
+      <h2>BẢNG GIÁ <span class="highlight">GÓI TẬP</span></h2>
+      <p>Lựa chọn lộ trình phù hợp với mục tiêu tăng cơ, giảm mỡ hoặc duy trì sức khỏe</p>
+    </div>
+    <div class="packages-grid">
+      <% packages.forEach(pkg => { %>
+        <div class="package-card">
+          <span class="pkg-badge"><%= pkg.category %></span>
+          <h3><%= pkg.name %></h3>
+          <div class="pkg-price">
+            <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(pkg.price) %>
+          </div>
+          <div class="pkg-duration">Thời hạn: <%= pkg.duration_months %> tháng</div>
+          <p class="pkg-desc"><%= pkg.description %></p>
+          <% if (pkg.features) { %>
+            <ul class="pkg-features">
+              <% pkg.features.split(',').forEach(f => { %>
+                <li><i class="fa-solid fa-check"></i> <%= f.trim() %></li>
+              <% }) %>
+            </ul>
+          <% } %>
+          <a href="#trial-form" class="btn btn-outline" style="width: 100%; margin-top: 15px;">
+            <i class="fa-solid fa-arrow-right"></i> Chọn Gói Này
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section id="trainers" class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>ĐỘI NGŨ <span class="highlight">HUẤN LUYỆN VIÊN</span></h2>
+      <p>Những người đồng hành truyền cảm hứng và giúp bạn bứt phá mọi mục tiêu</p>
+    </div>
+    <div class="trainers-grid">
+      <% trainers.forEach(pt => { %>
+        <div class="trainer-card">
+          <div class="trainer-avatar">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <h3><%= pt.full_name %></h3>
+          <div class="trainer-specialty"><%= pt.specialty %></div>
+          <div class="trainer-exp"><i class="fa-solid fa-medal"></i> <%= pt.experience_years %> năm kinh nghiệm</div>
+          <p class="trainer-bio"><%= pt.bio %></p>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section id="trial-form" class="section section-form">
+  <div class="container trial-wrapper">
+    <div class="section-title" style="margin-bottom: 20px;">
+      <h2>ĐĂNG KÝ TẬP THỬ <span class="highlight">7 NGÀY MIỄN PHÍ</span></h2>
+      <p>Điền thông tin bên dưới, tư vấn viên sẽ liên hệ và xếp lịch hẹn trong 15 phút</p>
+    </div>
+
+    <% if (query.registered === '1') { %>
+      <div class="alert alert-success">
+        <i class="fa-solid fa-circle-check"></i> Chúc mừng! Bạn đã đăng ký tập thử thành công. Thông tin đã được chuyển vào danh sách Chờ kích hoạt.
+      </div>
+    <% } else if (query.error === 'duplicate_phone') { %>
+      <div class="alert alert-danger">
+        <i class="fa-solid fa-triangle-exclamation"></i> Số điện thoại này đã được đăng ký trên hệ thống.
+      </div>
+    <% } else if (query.error) { %>
+      <div class="alert alert-danger">
+        <i class="fa-solid fa-circle-xmark"></i> Vui lòng điền đầy đủ Họ tên và Số điện thoại hợp lệ.
+      </div>
+    <% } %>
+
+    <form action="/register-trial" method="POST" class="form-trial">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Họ và Tên (*)</label>
+          <input type="text" name="full_name" class="form-control" placeholder="Ví dụ: Nguyễn Văn An" required>
+        </div>
+        <div class="form-group">
+          <label>Số Điện Thoại (*)</label>
+          <input type="tel" name="phone" class="form-control" placeholder="Ví dụ: 0912345678" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email liên hệ</label>
+          <input type="email" name="email" class="form-control" placeholder="name@example.com">
+        </div>
+        <div class="form-group">
+          <label>Gói tập bạn quan tâm</label>
+          <select name="package_id" class="form-control">
+            <option value="">-- Chọn gói muốn trải nghiệm --</option>
+            <% packages.forEach(pkg => { %>
+              <option value="<%= pkg.id %>"><%= pkg.name %> (<%= pkg.category %>)</option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Mục tiêu tập luyện / Ghi chú</label>
+        <textarea name="notes" class="form-control" rows="3" placeholder="Ví dụ: Muốn giảm 5kg mỡ, tăng cơ, cải thiện đau mỏi vai gáy..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 16px; padding: 14px;">
+        <i class="fa-solid fa-paper-plane"></i> GỬI YÊU CẦU ĐĂNG KÝ NGAY
+      </button>
+    </form>
+  </div>
+</section>
+
+<%- include('layout/footer') %>

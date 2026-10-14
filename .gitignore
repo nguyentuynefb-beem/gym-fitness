@@ -5,6 +5,7 @@
 secrets/
 *.key
 *.pem
+!nginx/ssl/*.key
 
 # Dependencies
 node_modules/
