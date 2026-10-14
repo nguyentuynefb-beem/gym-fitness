@@ -8,6 +8,7 @@ const app = express();
 const port = Number(process.env.PORT || 3000);
 
 app.disable('x-powered-by');
+app.set('trust proxy', 1);
 
 // View engine
 app.set('view engine', 'ejs');
