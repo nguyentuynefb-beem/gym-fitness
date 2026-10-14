@@ -13,33 +13,36 @@
 
 ## 2. Kiến trúc hệ thống & Mạng (Network Architecture)
 
-Hệ thống được thiết kế theo mô hình kiến trúc phân lớp an toàn (Defense in Depth) với Nginx đóng vai trò là Reverse Proxy & Ingress Gateway duy nhất:
+Hệ thống được thiết kế theo mô hình kiến trúc phân lớp an toàn (Defense in Depth) kết hợp cụm giám sát tập trung Prometheus & Grafana:
 
 ```
-[ Khách hàng / Quản trị viên ]
-             │
-             │ (Cổng 80: HTTP Redirect -> HTTPS)
-             │ (Cổng 443: HTTPS với SSL tự ký & Security Headers)
-             ▼
-    ┌─────────────────┐
-    │  Nginx Gateway  │ (Image: nginx:1.27-alpine)
-    └────────┬────────┘
-             │ (Mạng nội bộ 'frontend')
-             ├───────────────────────────────────┐
-             ▼                                   ▼
-    ┌─────────────────┐                 ┌─────────────────┐
-    │   Node.js App   │                 │   phpMyAdmin    │
-    │  (Titan Fitness)│                 │  (Cổng web DB)  │
-    │ (User: node)    │                 │ (Subpath /pma/) │
-    └────────┬────────┘                 └────────┬────────┘
-             │                                   │
-             │ (Mạng nội bộ 'backend' - Cô lập)  │
-             └─────────────────┬─────────────────┘
-                               ▼
-                      ┌─────────────────┐
-                      │  MySQL 8.4 DB   │ (Chỉ kết nối nội bộ,
-                      │    (gym_db)     │  không mở cổng ra host)
-                      └─────────────────┘
+[ Khách hàng / Quản trị viên ]               [ Kỹ sư Quản trị / Giám sát ]
+             │                                              │
+             │ (Cổng 80: Redirect -> 443)                   │ (Cổng 3001: Grafana UI)
+             │ (Cổng 443: HTTPS Ingress)                    │ (Cổng 9090: Prometheus UI)
+             ▼                                              ▼
+    ┌─────────────────┐                            ┌─────────────────┐
+    │  Nginx Gateway  │ (Image: nginx:1.27-alpine) │   Grafana 11.2  │ (Port 3001)
+    └────────┬────────┘                            └────────┬────────┘
+             │                                              │ (Truy vấn metrics)
+             │ (Mạng nội bộ 'frontend')                     ▼
+             ├───────────────────────┬─────────────▶┌─────────────────┐
+             │                       │              │ Prometheus 2.54 │ (Port 9090)
+             ▼                       ▼              └────────┬────────┘
+    ┌─────────────────┐     ┌─────────────────┐              │ (Scrape metrics)
+    │   Node.js App   │     │   phpMyAdmin    │              ├─────────────────┐
+    │  (Titan Fitness)│     │  (Cổng web DB)  │              │                 │
+    │  (User: node)   │     │ (Subpath /pma/) │              ▼                 ▼
+    │ (/metrics:3000) │     └────────┬────────┘     ┌─────────────────┐ ┌───────────────┐
+    └────────┬────────┘              │              │ Nginx Exporter  │ │    cAdvisor   │
+             │                       │              │   (Cổng 9113)   │ │  (Cổng 8080)  │
+             │ (Mạng nội bộ 'backend' - Cô lập)     └─────────────────┘ └───────────────┘
+             └───────────────────────┼──────────────┐        │ (Mạng nội bộ 'backend')
+                                     ▼              ▼        ▼
+                            ┌─────────────────┐    ┌───────────────────┐
+                            │  MySQL 8.4 DB   │◀───│  mysqld-exporter  │
+                            │    (gym_db)     │    │    (Cổng 9104)    │
+                            └─────────────────┘    └───────────────────┘
 ```
 
 ---
@@ -47,8 +50,8 @@ Hệ thống được thiết kế theo mô hình kiến trúc phân lớp an to
 ## 3. Các biện pháp Hardening & An toàn hệ thống (Tiêu chí 6)
 
 1. **Network Isolation (Cô lập mạng):**
-   - Mạng `backend` được cấu hình `internal: true`. Container CSDL MySQL hoàn toàn không thể bị quét cổng hoặc kết nối từ bên ngoài host.
-   - Các container `app` và `phpmyadmin` không mở cổng trực tiếp ra host (đóng các cổng 18080 và 18081). Mọi lưu lượng bắt buộc phải đi qua Reverse Proxy Nginx.
+   - Mạng `backend` được cấu hình `internal: true`. Container CSDL MySQL và mysqld-exporter hoàn toàn không thể bị quét cổng hoặc kết nối từ bên ngoài host.
+   - Các container `app` và `phpmyadmin` không mở cổng trực tiếp ra host. Mọi lưu lượng truy cập ứng dụng bắt buộc phải đi qua Reverse Proxy Nginx.
 2. **Non-Root Container:**
    - Ứng dụng Node.js trong `app/Dockerfile` được phân quyền và thực thi dưới user unprivileged `node` (UID/GID 1000), tuân thủ nguyên tắc Least Privilege.
 3. **Mật khẩu mạnh & Phân quyền CSDL:**
@@ -99,7 +102,7 @@ docker compose ps
 
 ## 5. Hướng dẫn truy cập các dịch vụ
 
-| Dịch vụ | Địa chỉ truy cập | Ghi chú |
+| Dịch vụ | Địa chỉ truy cập | Ghi chú & Tài khoản mặc định |
 | :--- | :--- | :--- |
 | **Website Titan Fitness (Trang chủ)** | `https://localhost/` | Tự động chuyển hướng từ `http://localhost/` |
 | **Trang Quản trị Admin (Dashboard)** | `https://localhost/admin` | Quản lý hội viên, gói tập, lịch tập, HLV |
@@ -108,8 +111,10 @@ docker compose ps
 | **Quản lý Huấn luyện viên** | `https://localhost/admin/trainers` | Danh sách PT, chuyên môn, kinh nghiệm |
 | **Quản lý Lịch tập** | `https://localhost/admin/schedules` | Xếp lịch tập theo khung giờ và phòng tập |
 | **Công cụ Quản trị CSDL (phpMyAdmin)** | `https://localhost/pma/` | Đăng nhập bằng `gym_app` hoặc `root` |
-| **Healthcheck Gateway** | `https://localhost/health` | Trả về trạng thái UP của Nginx |
-| **Metrics Nginx (Stub Status)** | `https://localhost/stub_status` | Phục vụ Prometheus cào dữ liệu |
+| **Hệ thống Giám sát Grafana** | `http://localhost:3001` | **Tài khoản:** `admin` / `admin` (Đã nạp sẵn 4 Dashboards) |
+| **Máy chủ Thu thập Prometheus** | `http://localhost:9090` | Xem danh sách Target tại `/targets` (Tất cả UP) |
+| **Healthcheck Gateway (Nginx)** | `https://localhost/health` | Trả về trạng thái UP của Nginx |
+| **Metrics Nginx (Stub Status)** | `https://localhost/stub_status` | Phục vụ Nginx Exporter cào dữ liệu |
 
 ---
 
@@ -128,3 +133,11 @@ docker compose ps
   - Cấu hình SSL tự ký (RSA 2048 SAN) và tự động redirect HTTP sang HTTPS.
   - Áp dụng các chính sách Hardening: Network Isolation, đóng cổng host trực tiếp, Non-root App container, bộ Security Headers chuẩn.
   - Cấu hình reverse proxy cho phpMyAdmin (`/pma/`) và Nginx metrics (`/stub_status`).
+- **Ngày 4 (`feature/day04-monitoring-prometheus-grafana`)**:
+  - Tích hợp thư viện `prom-client` vào ứng dụng Node.js, cung cấp endpoint `/metrics` chuẩn Prometheus (HTTP request duration, status codes, memory/CPU).
+  - Triển khai `mysqld-exporter:v0.15.1` kết nối an toàn trong mạng nội bộ `backend` để giám sát MySQL (connections, queries, buffer pool).
+  - Triển khai `nginx-prometheus-exporter:1.3.0` cào lưu lượng từ `/stub_status` của Nginx Gateway.
+  - Triển khai `cAdvisor:v0.49.1` giám sát mức sử dụng CPU/RAM/Network của toàn bộ containers.
+  - Cấu hình Prometheus 2.54 tự động scrape 5 targets với trạng thái UP 100%.
+  - Tự động hóa hoàn toàn Grafana 11.2 (Provisioning) với Datasource Prometheus và 4 Dashboards chi tiết: Web Application, MySQL Database, Nginx Gateway, Docker Containers.
+  - Xuất báo cáo nghiệm thu [day04-verification.txt](docs/evidence/day04-verification.txt).
