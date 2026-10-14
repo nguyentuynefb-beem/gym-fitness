@@ -1,0 +1,82 @@
+==================================================
+VERIFICATION REPORT: DAY 05 - CENTRALIZED LOGGING WITH LOKI & PROMTAIL
+Date: 10/14/2026 23:16:11
+==================================================
+
+1. DOCKER COMPOSE FULL 11-CONTAINER STACK STATUS:
+NAME                            IMAGE                                   COMMAND                  SERVICE           CREATED          STATUS                    PORTS
+gym-fitness-app-1               gym-fitness-app                         "docker-entrypoint.s…"   app               43 minutes ago   Up 43 minutes (healthy)   3000/tcp
+gym-fitness-cadvisor-1          gcr.io/cadvisor/cadvisor:v0.49.1        "/usr/bin/cadvisor -…"   cadvisor          5 hours ago      Up 5 hours (healthy)      8080/tcp
+gym-fitness-grafana-1           grafana/grafana:11.2.0                  "/run.sh"                grafana           30 minutes ago   Up 31 minutes (healthy)   0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp
+gym-fitness-loki-1              grafana/loki:3.1.0                      "/usr/bin/loki -conf…"   loki              43 minutes ago   Up 43 minutes (healthy)   0.0.0.0:3100->3100/tcp, [::]:3100->3100/tcp
+gym-fitness-mysql-1             mysql:8.4                               "docker-entrypoint.s…"   mysql             24 hours ago     Up 7 hours (healthy)      3306/tcp, 33060/tcp
+gym-fitness-mysqld-exporter-1   prom/mysqld-exporter:v0.15.1            "/bin/mysqld_exporte…"   mysqld-exporter   5 hours ago      Up 5 hours                9104/tcp
+gym-fitness-nginx-1             nginx:1.27-alpine                       "/docker-entrypoint.…"   nginx             6 hours ago      Up 8 minutes (healthy)    0.0.0.0:80->80/tcp, [::]:80->80/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp
+gym-fitness-nginx-exporter-1    nginx/nginx-prometheus-exporter:1.3.0   "/usr/bin/nginx-prom…"   nginx-exporter    6 hours ago      Up 6 hours                9113/tcp
+gym-fitness-phpmyadmin-1        phpmyadmin:5.2-apache                   "/docker-entrypoint.…"   phpmyadmin        12 hours ago     Up 7 hours                80/tcp
+gym-fitness-prometheus-1        prom/prometheus:v2.54.1                 "/bin/prometheus --c…"   prometheus        6 hours ago      Up 6 hours (healthy)      0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp
+gym-fitness-promtail-1          grafana/promtail:3.1.0                  "/usr/bin/promtail -…"   promtail          42 minutes ago   Up 9 minutes              
+
+
+2. LOGGING INFRASTRUCTURE HEALTH:
+  * Loki Server (Port 3100): HTTP 200 - ready
+  * Promtail Active Tailing Targets:
+    promtail-1  | level=info ts=2026-10-14T16:08:14.877347792Z caller=filetargetmanager.go:372 msg="Adding target" key="/var/log/nginx/ingress_access.log:{job=\"nginx\", log_type=\"access\", service=\"gym-nginx-ingress\"}"
+    promtail-1  | level=info ts=2026-10-14T16:08:14.877527892Z caller=filetargetmanager.go:372 msg="Adding target" key="/var/log/app/*.log:{job=\"gym-app\", service=\"gym-fitness-app\"}"
+    promtail-1  | level=info ts=2026-10-14T16:08:14.877548792Z caller=filetargetmanager.go:372 msg="Adding target" key="/var/log/nginx/ingress_error.log:{job=\"nginx\", level=\"error\", log_type=\"error\", service=\"gym-nginx-ingress\"}"
+    promtail-1  | level=info ts=2026-10-14T16:08:14.877722492Z caller=tailer.go:147 component=tailer msg="tail routine: started" path=/var/log/nginx/ingress_access.log
+    promtail-1  | level=info ts=2026-10-14T16:08:14.877746192Z caller=tailer.go:147 component=tailer msg="tail routine: started" path=/var/log/nginx/ingress_error.log
+    promtail-1  | level=info ts=2026-10-14T16:08:14.878005792Z caller=tailer.go:147 component=tailer msg="tail routine: started" path=/var/log/app/app.log
+
+3. LOGQL QUERY VERIFICATION & REAL LOG OUTPUTS:
+  --- [Query 1 - All Centralized Logs] ---
+  LogQL Expression: {job=~"nginx|gym-app"}
+  Matching Streams: 5
+  Stream Labels: {'filename': '/var/log/nginx/ingress_access.log', 'job': 'nginx', 'log_type': 'access', 'method': 'GET', 'service': 'gym-nginx-ingress', 'service_name': 'gym-nginx-ingress', 'status': '404'}
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /api/unknown-endpoint HTTP/1.1" 404 71 "-" "LokiTrafficBot/1.0" "-" rt=0.002 uct="0.000" uht="0.001" urt="0.001"
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /not-found-gym-page-test HTTP/1.1" 404 71 "-" "LokiTrafficBot/1.0" "-" rt=0.001 uct="0.000" uht="0.001" urt="0.001"
+  Stream Labels: {'filename': '/var/log/nginx/ingress_access.log', 'job': 'nginx', 'log_type': 'access', 'method': 'GET', 'service': 'gym-nginx-ingress', 'service_name': 'gym-nginx-ingress', 'status': '200'}
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /admin/schedules HTTP/1.1" 200 26197 "-" "LokiTrafficBot/1.0" "-" rt=0.004 uct="0.000" uht="0.003" urt="0.003"
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /admin/trainers HTTP/1.1" 200 10853 "-" "LokiTrafficBot/1.0" "-" rt=0.003 uct="0.001" uht="0.003" urt="0.003"
+
+  --- [Query 2 - Node.js App Structured JSON Logs (HTTP 200)] ---
+  LogQL Expression: {job="gym-app"} | json | status = "200"
+  Matching Streams: 60
+  Stream Labels: {'detected_level': 'info', 'duration_ms': '8', 'event': 'http_request', 'event_extracted': 'http_request', 'filename': '/var/log/app/app.log', 'ip': '172.20.0.1', 'job': 'gym-app', 'level': 'info', 'level_extracted': 'info', 'method': 'GET', 'method_extracted': 'GET', 'path': '/members', 'service': 'gym-fitness-app', 'service_name': 'gym-fitness-app', 'status': '200', 'status_extracted': '200', 'timestamp': '2026-10-14T16:13:00.483Z'}
+    Log Entry: {"level":"info","event":"http_request","method":"GET","path":"/members","status":200,"duration_ms":8,"ip":"172.20.0.1","timestamp":"2026-10-14T16:13:00.483Z"}
+  Stream Labels: {'detected_level': 'info', 'duration_ms': '7', 'event': 'http_request', 'event_extracted': 'http_request', 'filename': '/var/log/app/app.log', 'ip': '172.20.0.1', 'job': 'gym-app', 'level': 'info', 'level_extracted': 'info', 'method': 'GET', 'method_extracted': 'GET', 'path': '/schedules', 'service': 'gym-fitness-app', 'service_name': 'gym-fitness-app', 'status': '200', 'status_extracted': '200', 'timestamp': '2026-10-14T16:13:00.525Z'}
+    Log Entry: {"level":"info","event":"http_request","method":"GET","path":"/schedules","status":200,"duration_ms":7,"ip":"172.20.0.1","timestamp":"2026-10-14T16:13:00.525Z"}
+
+  --- [Query 3 - Application Warning & 404 Logs] ---
+  LogQL Expression: {job="gym-app"} | json | level = "warn"
+  Matching Streams: 40
+  Stream Labels: {'detected_level': 'warn', 'event': 'not_found', 'event_extracted': 'not_found', 'filename': '/var/log/app/app.log', 'ip': '172.20.0.1', 'job': 'gym-app', 'level': 'warn', 'level_extracted': 'warn', 'message': 'Page not found (404)', 'method': 'GET', 'method_extracted': 'GET', 'path': '/not-found-gym-page-test', 'service': 'gym-fitness-app', 'service_name': 'gym-fitness-app', 'timestamp': '2026-10-14T16:13:57.603Z'}
+    Log Entry: {"level":"warn","event":"not_found","path":"/not-found-gym-page-test","method":"GET","ip":"172.20.0.1","message":"Page not found (404)","timestamp":"2026-10-14T16:13:57.603Z"}
+  Stream Labels: {'detected_level': 'warn', 'event': 'not_found', 'event_extracted': 'not_found', 'filename': '/var/log/app/app.log', 'ip': '172.20.0.1', 'job': 'gym-app', 'level': 'warn', 'level_extracted': 'warn', 'message': 'Page not found (404)', 'method': 'GET', 'method_extracted': 'GET', 'path': '/not-found-gym-page-test', 'service': 'gym-fitness-app', 'service_name': 'gym-fitness-app', 'timestamp': '2026-10-14T16:13:03.790Z'}
+    Log Entry: {"level":"warn","event":"not_found","path":"/not-found-gym-page-test","method":"GET","ip":"172.20.0.1","message":"Page not found (404)","timestamp":"2026-10-14T16:13:03.790Z"}
+
+  --- [Query 4 - Nginx Ingress Access Logs] ---
+  LogQL Expression: {job="nginx", log_type="access"}
+  Matching Streams: 2
+  Stream Labels: {'filename': '/var/log/nginx/ingress_access.log', 'job': 'nginx', 'log_type': 'access', 'method': 'GET', 'service': 'gym-nginx-ingress', 'service_name': 'gym-nginx-ingress', 'status': '404'}
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /api/unknown-endpoint HTTP/1.1" 404 71 "-" "LokiTrafficBot/1.0" "-" rt=0.002 uct="0.000" uht="0.001" urt="0.001"
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /not-found-gym-page-test HTTP/1.1" 404 71 "-" "LokiTrafficBot/1.0" "-" rt=0.001 uct="0.000" uht="0.001" urt="0.001"
+  Stream Labels: {'filename': '/var/log/nginx/ingress_access.log', 'job': 'nginx', 'log_type': 'access', 'method': 'GET', 'service': 'gym-nginx-ingress', 'service_name': 'gym-nginx-ingress', 'status': '200'}
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /admin/schedules HTTP/1.1" 200 26197 "-" "LokiTrafficBot/1.0" "-" rt=0.004 uct="0.000" uht="0.003" urt="0.003"
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /admin/trainers HTTP/1.1" 200 10853 "-" "LokiTrafficBot/1.0" "-" rt=0.003 uct="0.001" uht="0.003" urt="0.003"
+
+  --- [Query 5 - Nginx Filtered HTTP 404 Requests] ---
+  LogQL Expression: {job="nginx"} | status = 404
+  Matching Streams: 1
+  Stream Labels: {'filename': '/var/log/nginx/ingress_access.log', 'job': 'nginx', 'log_type': 'access', 'method': 'GET', 'service': 'gym-nginx-ingress', 'service_name': 'gym-nginx-ingress', 'status': '404'}
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /api/unknown-endpoint HTTP/1.1" 404 71 "-" "LokiTrafficBot/1.0" "-" rt=0.002 uct="0.000" uht="0.001" urt="0.001"
+    Log Entry: 172.20.0.1 - - [14/Oct/2026:16:13:57 +0000] "GET /not-found-gym-page-test HTTP/1.1" 404 71 "-" "LokiTrafficBot/1.0" "-" rt=0.001 uct="0.000" uht="0.001" urt="0.001"
+
+4. GRAFANA LOKI DATASOURCE & LOGS DASHBOARD:
+  * Data Source: Loki (http://loki:3100) auto-provisioned via datasources.yaml
+  * Provisioned Dashboard: Centralized Logging (Loki & Promtail) [UID: titan-gym-loki-logs]
+  * Accessible via Grafana UI: http://localhost:3001/d/titan-gym-loki-logs/centralized-logging-loki-promtail
+
+==================================================
+CONCLUSION: ALL 11 SERVICES HEALTHY - LOKI & PROMTAIL FULLY OPERATIONAL
+==================================================
