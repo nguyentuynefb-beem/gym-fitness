@@ -48,29 +48,28 @@ Hệ thống được thiết kế theo mô hình kiến trúc phân lớp an to
 
 ---
 
-## 3. Các biện pháp Hardening & An toàn hệ thống (Tiêu chí 6)
+## 3. Ma trận 6 Biện pháp Bảo mật Chuyên sâu & Hardening Đa tầng (Tiêu chí 6)
 
-1. **Network Isolation (Cô lập mạng):**
-   - Mạng `backend` được cấu hình `internal: true`. Container CSDL MySQL và mysqld-exporter hoàn toàn không thể bị quét cổng hoặc kết nối từ bên ngoài host.
-   - Các container `app` và `phpmyadmin` không mở cổng trực tiếp ra host. Mọi lưu lượng truy cập ứng dụng bắt buộc phải đi qua Reverse Proxy Nginx.
-2. **Non-Root Container:**
-   - Ứng dụng Node.js trong `app/Dockerfile` được phân quyền và thực thi dưới user unprivileged `node` (UID/GID 1000), tuân thủ nguyên tắc Least Privilege.
-3. **Mật khẩu mạnh & Phân quyền CSDL:**
-   - Mật khẩu tạo ngẫu nhiên bằng OpenSSL hex 24-byte (48 ký tự).
-   - Ứng dụng web chỉ kết nối bằng tài khoản người dùng ứng dụng `gym_app`, không sử dụng tài khoản `root`.
-4. **SSL/TLS & HTTPS:**
-   - Tự động chuyển hướng toàn bộ lưu lượng HTTP (cổng 80) sang HTTPS (cổng 443) bằng mã phản hồi `301 Moved Permanently`.
-   - Cấu hình chỉ chấp nhận giao thức hiện đại `TLSv1.2` và `TLSv1.3` với danh sách ciphers an toàn.
-   - Hỗ trợ SAN (Subject Alternative Name) cho `localhost` và `127.0.0.1`.
-5. **Nginx Security Headers & Tối ưu:**
-   - `X-Frame-Options: SAMEORIGIN` (Chống tấn công Clickjacking).
-   - `X-Content-Type-Options: nosniff` (Chống MIME-type sniffing).
-   - `X-XSS-Protection: 1; mode=block` (Chống Cross-Site Scripting).
-   - `Referrer-Policy: strict-origin-when-cross-origin`.
-   - `Strict-Transport-Security: max-age=31536000; includeSubDomains`.
-   - `server_tokens off`: Ẩn thông tin phiên bản Nginx trong response headers.
-   - Giới hạn body upload (`client_max_body_size 25M`).
-   - Cấu hình format log chi tiết thời gian phản hồi (`rt`, `uct`, `uht`, `urt`) phục vụ Promtail/Loki.
+Hệ thống được thiết kế và bảo vệ đa tầng theo nguyên tắc **Defense in Depth** (Phòng thủ theo chiều sâu) và **Least Privilege** (Đặc quyền tối thiểu), bao phủ từ cổng ngõ Ingress Gateway đến Container, Mạng và Cơ sở Dữ liệu:
+
+| STT | Tầng bảo vệ (Layer) | Biện pháp Hardening cụ thể | Cấu hình kỹ thuật hiện thực | Mục đích & Nguy cơ ngăn chặn | Minh chứng kiểm thử |
+| :---: | :--- | :--- | :--- | :--- | :--- |
+| **1** | **Ingress Gateway** | **Rate Limiting & DoS Protection** | `limit_req_zone` (10 req/s cho web chung, 2 req/s cho `/register-trial` và `/admin`), trả về mã `HTTP 429`. | Ngăn chặn tấn công vét cạn mật khẩu (Brute-force), spam bot và từ chối dịch vụ (DoS). | Test 2 trong `security-audit.sh`: 24/30 request dồn dập bị chặn với HTTP 429. |
+| **2** | **Container Engine** | **Resource Limits (Cgroups)** | Khai báo trần CPU/RAM trong `compose.yaml`: MySQL (1GB/1 CPU), App (512MB/0.75 CPU), Nginx (256MB/0.5 CPU)... | Chống cạn kiệt tài nguyên máy chủ host, ngăn ngừa hiện tượng crash dây chuyền do OOM (Out of Memory). | Test 5 trong `security-audit.sh`: `docker stats --no-stream` hiển thị rõ giới hạn RAM từng container. |
+| **3** | **Privilege Layer** | **Nguyên tắc Least Privilege & Non-Root** | Container App chạy user `node` (UID 1000), bật `security_opt: [no-new-privileges:true]`, thu hồi toàn bộ quyền thừa `cap_drop: [ALL]`. | Vô hiệu hóa nguy cơ leo thang đặc quyền (Container Breakout) hoặc can thiệp kernel máy chủ host. | Test 4 trong `security-audit.sh`: Xác nhận UID=1000(node), không có quyền root. |
+| **4** | **Network Layer** | **Network Segmentation (Cô lập CSDL)** | Mạng `backend` cấu hình `internal: true`. Cổng MySQL 3306 hoàn toàn không publish ra máy host. | Ngăn chặn kẻ tấn công dò quét cổng hoặc khai thác CSDL trực tiếp từ mạng bên ngoài. | Test 1 trong `security-audit.sh`: Quét cổng 3306 trả về `Connection Refused` 100%. |
+| **5** | **Database Layer** | **Phân quyền tối thiểu & Mật khẩu mạnh** | Ứng dụng chỉ kết nối qua user `gym_app` với quyền hạn chế trên `gym_db`. Mật khẩu OpenSSL ngẫu nhiên hex 48 ký tự. | Ngăn chặn chiếm quyền quản trị server CSDL ngay cả khi ứng dụng bị tấn công SQL Injection. | Biến môi trường `.env` phân tách tài khoản root và user ứng dụng riêng biệt. |
+| **6** | **Web & Transport** | **Bộ Security Headers & Modern TLS** | Cấu hình chỉ hỗ trợ `TLSv1.2` / `TLSv1.3`, tự động chuyển hướng 301 sang HTTPS. Trang bị 8 tiêu chí Security Headers (`CSP`, `HSTS`, `X-Frame-Options`, `nosniff`...). | Chống tấn công Clickjacking, MIME-sniffing, XSS, Man-in-the-Middle và nghe lén dữ liệu. | Test 3 trong `security-audit.sh`: Quét và xác nhận 8/8 tiêu chí Security Headers. |
+
+### 🛠️ Kịch bản Kiểm thử Bảo mật Tự động (`security-audit.sh`)
+
+Toàn bộ 5 kịch bản kiểm thử bảo mật đã được tự động hóa trong file script [`security-audit.sh`](security-audit.sh):
+```bash
+# Thực hiện kiểm thử bảo mật tự động
+bash security-audit.sh
+```
+
+Báo cáo nghiệm thu chi tiết được lưu trữ tại: [`docs/evidence/day06-verification.txt`](docs/evidence/day06-verification.txt).
 
 ---
 
@@ -163,3 +162,13 @@ Hệ thống hỗ trợ đầy đủ cú pháp LogQL trên Grafana (Tab **Explor
   - Thu thập và phân tích Nginx Access/Error logs (volume `nginx_logs`) với pipeline trích xuất status, method, latency.
   - Tự động nạp Loki DataSource và Dashboard `Centralized Logging (Loki & Promtail)` vào Grafana.
   - Xây dựng và nghiệm thu 7 câu lệnh LogQL mẫu, xuất báo cáo [day05-verification.txt](docs/evidence/day05-verification.txt).
+- **Ngày 6 (`feature/day06-security-hardening`)**:
+  - Triển khai toàn diện 6 biện pháp Security Hardening đa tầng (Gateway, Container, Privilege, Network, Database, Web & Transport).
+  - Cấu hình Nginx Rate Limiting (`limit_req_zone`) chống DoS/Brute-force với mã phản hồi `HTTP 429 Too Many Requests`.
+  - Khai báo trần giới hạn CPU/RAM (Resource Limits / Cgroups) cho 100% container trong `compose.yaml`.
+  - Thực thi nguyên tắc Least Privilege: container chạy Non-Root (`node` UID 1000), `security_opt: [no-new-privileges:true]`, thu hồi toàn bộ quyền thừa `cap_drop: [ALL]`.
+  - Cô lập mạng CSDL MySQL 2 lớp (`internal: true`, không publish port 3306 ra host).
+  - Phân quyền người dùng tối thiểu cho `gym_app` cùng mật khẩu ngẫu nhiên OpenSSL hex 48 ký tự.
+  - Trang bị đầy đủ 8 tiêu chí Security Headers (`Content-Security-Policy`, `HSTS`, `X-Frame-Options`, `X-Content-Type-Options`, `Permissions-Policy`, `server_tokens off`).
+  - Xây dựng kịch bản kiểm thử bảo mật tự động [`security-audit.sh`](security-audit.sh) với 5 bài test xâm nhập giả lập (đạt tỷ lệ 5/5 Pass 100%).
+  - Xuất báo cáo nghiệm thu bảo mật [day06-verification.txt](docs/evidence/day06-verification.txt).
