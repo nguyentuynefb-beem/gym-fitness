@@ -1,3 +1,6 @@
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+
 -- ====================================================================
 -- Du lieu mau (Seed Data) cho He thong Quan ly Phong Gym / Fitness
 -- Sinh vien: Nguyen Duc Tuyen - MSSV: DTC245200566

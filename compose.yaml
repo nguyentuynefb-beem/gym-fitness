@@ -3,6 +3,9 @@ name: gym-fitness
 services:
   mysql:
     image: mysql:8.4
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:?Missing MYSQL_DATABASE}
