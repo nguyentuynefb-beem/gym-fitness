@@ -1,0 +1,60 @@
+====================================================================
+    TITAN FITNESS - SECURITY HARDENING VERIFICATION REPORT (DAY 06) 
+    Date & Time: 2026-10-15 09:21:09 +07
+    Host Environment: Ubuntu 24.04 LTS (WSL 2) / Docker Compose
+====================================================================
+
+>>> [TEST 1/5] Quet cong CSDL MySQL (Port 3306) tu ben ngoai Host...
+Muc dich: Chung minh cong 3306 cua CSDL bi co lap hoan toan (internal: true, no publish port).
+[PASS] Cong 3306 bi CHAN HOAN TOAN tu ben ngoai host (Connection Refused).
+  -> Chi tiet: MySQL chi hoat dong tren mang noi bo 'backend' (internal: true).
+  -> Xac nhan tu docker port: 
+
+>>> [TEST 2/5] Kiem tra Rate Limiting & Chong DoS/Brute-force (Nginx Ingress)...
+Muc dich: Ban 30 requests don dap vao endpoint nhay cam (/admin) de xac thuc Nginx tra ve HTTP 429.
+  -> Ket qua chuoi 30 requests: 200 200 200 200 200 200 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429
+  -> So luong HTTP 200 (Accepted): 6
+  -> So luong HTTP 429 (Too Many Requests / Rate Limited): 24
+[PASS] Nginx Rate Limiting kich hoat thanh cong! Da chan cac request vuot nguong bang ma HTTP 429.
+
+>>> [TEST 3/5] Quet bo Tieu de Bao mat (Security Headers) & TLS tu Ingress Gateway...
+Muc dich: Xac thuc day du cac header bao ve chong Clickjacking, XSS, Sniffing, CSP, HSTS.
+  [+] X-Frame-Options: SAMEORIGIN
+  [+] X-Content-Type-Options: nosniff
+  [+] X-XSS-Protection: 1; mode=block
+  [+] Referrer-Policy: strict-origin-when-cross-origin
+  [+] Strict-Transport-Security: max-age=31536000; includeSubDomains
+  [+] Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https:; connect-src 'self';
+  [+] Permissions-Policy: camera=(), microphone=(), geolocation=()
+  [+] Server: nginx (Phien ban da duoc an hoan toan - server_tokens off)
+[PASS] Bo Security Headers (8/8 tieu chi) dat chuan an toan cao.
+
+>>> [TEST 4/5] Kiem tra nguoi dung khong dac quyen (Least Privilege / Non-Root)...
+Muc dich: Xac thuc ung dung Node.js chay duoi user unprivileged (UID=1000 node, khong phai root).
+  -> Chi tiet user trong gym-fitness-app-1: uid=1000(node) gid=1000(node) groups=1000(node)
+[PASS] Container chay duoi user khong dac quyen 'node' (UID=1000). Nguyen tac Least Privilege dam bao.
+
+>>> [TEST 5/5] Kiem tra gioi han tai nguyen CPU / RAM (Resource Limits)...
+Muc dich: Xac thuc cac han muc tran RAM/CPU duoc Docker Engine ap dung cho tat ca dich vu.
+NAME                            CPU %     MEM USAGE / LIMIT     MEM %
+gym-fitness-grafana-1           0.04%     49.17MiB / 512MiB     9.60%
+gym-fitness-prometheus-1        0.03%     43.32MiB / 512MiB     8.46%
+gym-fitness-promtail-1          0.58%     20.09MiB / 256MiB     7.85%
+gym-fitness-nginx-exporter-1    0.00%     9.508MiB / 128MiB     7.43%
+gym-fitness-nginx-1             0.00%     10.96MiB / 256MiB     4.28%
+gym-fitness-app-1               0.54%     28.37MiB / 512MiB     5.54%
+gym-fitness-phpmyadmin-1        0.01%     12.13MiB / 256MiB     4.74%
+gym-fitness-mysqld-exporter-1   0.00%     7.93MiB / 128MiB      6.20%
+gym-fitness-cadvisor-1          0.41%     34.32MiB / 256MiB     13.41%
+gym-fitness-mysql-1             0.62%     438.9MiB / 1GiB       42.86%
+gym-fitness-loki-1              0.55%     54.5MiB / 512MiB      10.64%
+duanttcs_n5_postgres            0.00%     42.34MiB / 7.687GiB   0.54%
+[PASS] Gioi han RAM/CPU (Cgroups Limits) duoc ap dung chuan xac cho tung container.
+
+====================================================================
+                   KET QUA TONG HOP KIEM THU BAO MAT                 
+====================================================================
+  Tong so bai test: 5
+  So bai test dat : 5 / 5
+  Danh gia chung  : XUAT SAC - TAT CA 5 BAI TEST BAO MAT DEU DAT CHUAN (100%)
+====================================================================
