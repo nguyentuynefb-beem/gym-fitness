@@ -1,15 +1,41 @@
 <%- include('../layout/header', { pageTitle: 'Quản Lý Hội Viên' }) %>
 
 <div class="admin-container">
-  <div class="admin-header">
-    <div>
-      <h2><i class="fa-solid fa-users"></i> QUẢN LÝ HỘI VIÊN</h2>
-      <p style="color: var(--text-muted); font-size: 14px;">Quản lý hồ sơ, gói tập, gia hạn và trạng thái kích hoạt của khách hàng</p>
+
+  <!-- Enterprise Admin Sub-Navigation Bar -->
+  <div class="admin-nav-bar">
+    <div class="admin-nav-pill-group">
+      <a href="/admin" class="admin-nav-pill ">
+        <i class="fa-solid fa-gauge-high"></i> <span>Tổng Quan</span>
+      </a>
+      <a href="/admin/members" class="admin-nav-pill active">
+        <i class="fa-solid fa-users"></i> <span>Hội Viên</span>
+      </a>
+      <a href="/admin/packages" class="admin-nav-pill ">
+        <i class="fa-solid fa-tags"></i> <span>Gói Tập</span>
+      </a>
+      <a href="/admin/trainers" class="admin-nav-pill ">
+        <i class="fa-solid fa-user-ninja"></i> <span>Huấn Luyện Viên</span>
+      </a>
+      <a href="/admin/schedules" class="admin-nav-pill ">
+        <i class="fa-solid fa-calendar-days"></i> <span>Lịch Tập</span>
+      </a>
     </div>
-    <div class="admin-actions">
-      <a href="/admin" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Quay lại Dashboard</a>
-      <button class="btn btn-primary" onclick="document.getElementById('add-member-card').scrollIntoView({ behavior: 'smooth' });">
-        <i class="fa-solid fa-user-plus"></i> Thêm Hội Viên
+    <div class="admin-nav-right">
+      <a href="/" class="btn-return-site" title="Quay lại giao diện khách hàng">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> <span>Xem Trang Chủ</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="admin-header-panel">
+    <div class="admin-header-title">
+      <h2><i class="fa-solid fa-users text-primary"></i> QUẢN LÝ HỘI VIÊN</h2>
+      <p class="admin-header-subtitle">Quản lý danh sách khách hàng, hợp đồng gói tập, kích hoạt và gia hạn dịch vụ</p>
+    </div>
+    <div class="admin-header-actions">
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('add-member-card').scrollIntoView({ behavior: 'smooth' });">
+        <i class="fa-solid fa-user-plus"></i> Thêm Hội Viên Mới
       </button>
     </div>
   </div>
@@ -24,40 +50,45 @@
     <div class="alert alert-danger"><i class="fa-solid fa-triangle-exclamation"></i> Có lỗi xảy ra trong thao tác. Vui lòng kiểm tra lại số điện thoại (trùng lặp).</div>
   <% } %>
 
-  <div class="card" style="margin-bottom: 25px;">
-    <form action="/admin/members" method="GET" class="filter-form">
-      <div class="filter-inputs">
-        <div class="search-box">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" name="q" class="form-control" placeholder="Tìm theo tên, số điện thoại, email..." value="<%= searchQuery %>">
+  <!-- Search & Filter Card -->
+  <div class="glass-card mb-4">
+    <form action="/admin/members" method="GET" class="filter-bar-form">
+      <div class="filter-inputs-group">
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" name="q" class="form-control" placeholder="Tìm theo họ tên, số điện thoại, email..." value="<%= searchQuery %>">
         </div>
-        <select name="status" class="form-control" style="width: auto;">
+        <select name="status" class="form-control filter-select">
           <option value="">-- Tất cả trạng thái --</option>
           <option value="active" <%= selectedStatus === 'active' ? 'selected' : '' %>>Đang hoạt động</option>
           <option value="pending" <%= selectedStatus === 'pending' ? 'selected' : '' %>>Chờ kích hoạt / Tập thử</option>
           <option value="expired" <%= selectedStatus === 'expired' ? 'selected' : '' %>>Đã hết hạn</option>
         </select>
-        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-filter"></i> Lọc</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-filter"></i> Lọc Dữ Liệu</button>
         <% if (searchQuery || selectedStatus) { %>
-          <a href="/admin/members" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Đặt lại</a>
+          <a href="/admin/members" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Đặt Lại</a>
         <% } %>
       </div>
     </form>
   </div>
 
-  <div class="card" style="margin-bottom: 30px;">
-    <div class="card-header">
-      <h3><i class="fa-solid fa-address-book"></i> Danh Sách Hội Viên (<%= members.length %>)</h3>
+  <!-- Members Table -->
+  <div class="glass-card mb-4">
+    <div class="glass-card-header">
+      <div class="card-title-group">
+        <i class="fa-solid fa-address-book text-primary"></i>
+        <h3>Danh Sách Hội Viên (<%= members.length %>)</h3>
+      </div>
     </div>
     <div class="table-responsive">
-      <table class="table">
+      <table class="enterprise-table">
         <thead>
           <tr>
             <th>Mã</th>
             <th>Họ và Tên</th>
             <th>Số Điện Thoại</th>
             <th>Gói Tập</th>
-            <th>Thời Hạn Gói</th>
+            <th>Thời Hạn Hợp Đồng</th>
             <th>Trạng Thái</th>
             <th>Ghi Chú</th>
             <th>Thao Tác</th>
@@ -66,32 +97,48 @@
         <tbody>
           <% if (members.length === 0) { %>
             <tr>
-              <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 30px;">
-                Không tìm thấy hội viên nào phù hợp.
+              <td colspan="8" class="empty-cell">
+                <i class="fa-solid fa-user-slash empty-icon"></i>
+                <p>Không tìm thấy hồ sơ hội viên nào phù hợp.</p>
               </td>
             </tr>
           <% } %>
           <% members.forEach(m => { %>
             <tr>
-              <td>#<%= m.id %></td>
-              <td style="font-weight: 700; color: var(--text-primary);"><%= m.full_name %></td>
-              <td><%= m.phone %></td>
-              <td><%= m.package_name || 'Tập thử 7 ngày' %></td>
+              <td><span class="mono-text">#<%= m.id %></span></td>
               <td>
-                <%= m.start_date ? String(m.start_date).slice(0, 10) : '' %> ~ <%= m.end_date ? String(m.end_date).slice(0, 10) : '' %>
+                <div class="member-identity">
+                  <span class="user-avatar-mini"><i class="fa-solid fa-user"></i></span>
+                  <div>
+                    <div class="user-fullname"><%= m.full_name %></div>
+                    <div class="user-email-sub"><%= m.email || 'Chưa cập nhật email' %></div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="mono-text"><%= m.phone %></span></td>
+              <td><span class="badge-pkg-name"><%= m.package_name || 'Tập thử 7 ngày' %></span></td>
+              <td>
+                <div class="contract-dates">
+                  <span><%= new Date(m.start_date).toLocaleDateString('vi-VN') %></span>
+                  <i class="fa-solid fa-arrow-right-long text-muted"></i>
+                  <span><%= new Date(m.end_date).toLocaleDateString('vi-VN') %></span>
+                </div>
               </td>
               <td>
-                <span class="badge badge-<%= m.status %>">
+                <span class="status-pill status-<%= m.status %>">
+                  <i class="fa-solid fa-circle-dot"></i>
                   <%= m.status === 'active' ? 'Hoạt động' : (m.status === 'pending' ? 'Chờ kích hoạt' : 'Hết hạn') %>
                 </span>
               </td>
-              <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= m.notes || '-' %></td>
-              <td style="white-space: nowrap;">
-                <form action="/admin/members/delete/<%= m.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa hội viên này?');">
-                  <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">
-                    <i class="fa-solid fa-trash"></i> Xóa
-                  </button>
-                </form>
+              <td><span class="note-truncate" title="<%= m.notes %>"><%= m.notes || '-' %></span></td>
+              <td>
+                <div class="action-buttons-group">
+                  <form action="/admin/members/delete/<%= m.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa hội viên này khỏi hệ thống?');">
+                    <button type="submit" class="btn-action btn-action-delete" title="Xóa hội viên">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
           <% }) %>
@@ -100,29 +147,33 @@
     </div>
   </div>
 
-  <div id="add-member-card" class="card">
-    <div class="card-header">
-      <h3><i class="fa-solid fa-user-plus"></i> Thêm Hội Viên Mới</h3>
+  <!-- Add Member Form -->
+  <div id="add-member-card" class="glass-card">
+    <div class="glass-card-header">
+      <div class="card-title-group">
+        <i class="fa-solid fa-user-plus text-primary"></i>
+        <h3>Thêm Mới / Đăng Ký Hội Viên</h3>
+      </div>
     </div>
-    <form action="/admin/members/add" method="POST" class="admin-form">
-      <div class="form-row">
+    <form action="/admin/members/add" method="POST" class="admin-form-styled">
+      <div class="form-row-grid">
         <div class="form-group">
-          <label>Họ và Tên (*)</label>
-          <input type="text" name="full_name" class="form-control" placeholder="Nguyễn Văn B" required>
+          <label class="form-label">Họ và Tên (*)</label>
+          <input type="text" name="full_name" class="form-control" placeholder="Ví dụ: Hoàng Tuấn Anh" required>
         </div>
         <div class="form-group">
-          <label>Số Điện Thoại (*)</label>
-          <input type="tel" name="phone" class="form-control" placeholder="0987654321" required>
+          <label class="form-label">Số Điện Thoại (*)</label>
+          <input type="tel" name="phone" class="form-control" placeholder="0912345678" required>
         </div>
         <div class="form-group">
-          <label>Email</label>
-          <input type="email" name="email" class="form-control" placeholder="member@gmail.com">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control" placeholder="tuananh@example.com">
         </div>
       </div>
 
-      <div class="form-row">
+      <div class="form-row-grid">
         <div class="form-group">
-          <label>Giới Tính</label>
+          <label class="form-label">Giới Tính</label>
           <select name="gender" class="form-control">
             <option value="male">Nam</option>
             <option value="female">Nữ</option>
@@ -130,42 +181,49 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Gói Tập</label>
+          <label class="form-label">Ngày Sinh</label>
+          <input type="date" name="date_of_birth" class="form-control" value="1998-01-01">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gói Tập Tham Gia</label>
           <select name="package_id" class="form-control">
             <option value="">-- Chọn gói tập --</option>
-            <% packages.forEach(p => { %>
-              <option value="<%= p.id %>"><%= p.name %></option>
+            <% packages.forEach(pkg => { %>
+              <option value="<%= pkg.id %>"><%= pkg.name %> (<%= pkg.category %> - <%= pkg.duration_months %> tháng)</option>
             <% }) %>
           </select>
         </div>
+      </div>
+
+      <div class="form-row-grid">
         <div class="form-group">
-          <label>Trạng Thái</label>
+          <label class="form-label">Ngày Bắt Đầu (*)</label>
+          <input type="date" name="start_date" class="form-control" value="2026-10-15" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ngày Hết Hạn (*)</label>
+          <input type="date" name="end_date" class="form-control" value="2026-11-15" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Trạng Thái Hồ Sơ</label>
           <select name="status" class="form-control">
-            <option value="active">Hoạt động (Active)</option>
-            <option value="pending">Chờ kích hoạt (Pending)</option>
+            <option value="active">Đang hoạt động (Active)</option>
+            <option value="pending">Chờ kích hoạt / Tập thử (Pending)</option>
             <option value="expired">Đã hết hạn (Expired)</option>
           </select>
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label>Ngày Bắt Đầu (*)</label>
-          <input type="date" name="start_date" class="form-control" value="2026-10-13" required>
-        </div>
-        <div class="form-group">
-          <label>Ngày Kết Thúc (*)</label>
-          <input type="date" name="end_date" class="form-control" value="2026-11-13" required>
-        </div>
-        <div class="form-group">
-          <label>Ghi Chú</label>
-          <input type="text" name="notes" class="form-control" placeholder="Khách hàng quen, ưu tiên ca tối...">
-        </div>
+      <div class="form-group">
+        <label class="form-label">Ghi Chú Mục Tiêu & Sức Khỏe</label>
+        <textarea name="notes" class="form-control" rows="2" placeholder="Ví dụ: Hội viên muốn giảm 4kg mỡ, tăng cơ ngực, có tiền sử đau cổ tay..."></textarea>
       </div>
 
-      <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
-        <i class="fa-solid fa-floppy-disk"></i> Lưu Thông Tin Hội Viên
-      </button>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-md btn-glow">
+          <i class="fa-solid fa-floppy-disk"></i> Lưu Hồ Sơ Hội Viên
+        </button>
+      </div>
     </form>
   </div>
 </div>
