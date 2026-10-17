@@ -16,6 +16,16 @@ router.get('/', async (req, res) => {
       "SELECT COUNT(*) as total FROM members WHERE status = 'active'"
     );
 
+    const [schedules] = await pool.execute(`
+      SELECT s.id, s.session_date, s.time_slot, s.workout_type, s.status, s.notes,
+             t.full_name as trainer_name, t.specialty as trainer_specialty, t.avatar_url as trainer_avatar
+      FROM schedules s
+      LEFT JOIN trainers t ON s.trainer_id = t.id
+      WHERE s.status = 'scheduled'
+      ORDER BY s.session_date ASC, s.time_slot ASC
+      LIMIT 8
+    `);
+
     const stats = {
       activeMembers: memberStats.total || 0,
       totalTrainers: trainers.length,
@@ -25,6 +35,7 @@ router.get('/', async (req, res) => {
     res.render('index', {
       packages,
       trainers,
+      schedules,
       stats,
       query: req.query
     });

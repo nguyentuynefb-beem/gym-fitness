@@ -1,15 +1,41 @@
 <%- include('../layout/header', { pageTitle: 'Quản Lý Gói Tập' }) %>
 
 <div class="admin-container">
-  <div class="admin-header">
-    <div>
-      <h2><i class="fa-solid fa-tags"></i> QUẢN LÝ GÓI TẬP</h2>
-      <p style="color: var(--text-muted); font-size: 14px;">Tùy chỉnh danh mục, học phí và các quyền lợi ưu đãi cho từng gói tập</p>
+
+  <!-- Enterprise Admin Sub-Navigation Bar -->
+  <div class="admin-nav-bar">
+    <div class="admin-nav-pill-group">
+      <a href="/admin" class="admin-nav-pill ">
+        <i class="fa-solid fa-gauge-high"></i> <span>Tổng Quan</span>
+      </a>
+      <a href="/admin/members" class="admin-nav-pill ">
+        <i class="fa-solid fa-users"></i> <span>Hội Viên</span>
+      </a>
+      <a href="/admin/packages" class="admin-nav-pill active">
+        <i class="fa-solid fa-tags"></i> <span>Gói Tập</span>
+      </a>
+      <a href="/admin/trainers" class="admin-nav-pill ">
+        <i class="fa-solid fa-user-ninja"></i> <span>Huấn Luyện Viên</span>
+      </a>
+      <a href="/admin/schedules" class="admin-nav-pill ">
+        <i class="fa-solid fa-calendar-days"></i> <span>Lịch Tập</span>
+      </a>
     </div>
-    <div class="admin-actions">
-      <a href="/admin" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Quay lại Dashboard</a>
-      <button class="btn btn-primary" onclick="document.getElementById('add-package-card').scrollIntoView({ behavior: 'smooth' });">
-        <i class="fa-solid fa-plus"></i> Thêm Gói Tập
+    <div class="admin-nav-right">
+      <a href="/" class="btn-return-site" title="Quay lại giao diện khách hàng">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> <span>Xem Trang Chủ</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="admin-header-panel">
+    <div class="admin-header-title">
+      <h2><i class="fa-solid fa-tags text-primary"></i> QUẢN LÝ GÓI TẬP</h2>
+      <p class="admin-header-subtitle">Thiết lập chính sách học phí, thời hạn và quyền lợi đặc quyền của từng gói dịch vụ</p>
+    </div>
+    <div class="admin-header-actions">
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('add-package-card').scrollIntoView({ behavior: 'smooth' });">
+        <i class="fa-solid fa-plus"></i> Thêm Gói Tập Mới
       </button>
     </div>
   </div>
@@ -24,20 +50,24 @@
     <div class="alert alert-danger"><i class="fa-solid fa-triangle-exclamation"></i> Có lỗi xảy ra trong quá trình xử lý.</div>
   <% } %>
 
-  <div class="card" style="margin-bottom: 30px;">
-    <div class="card-header">
-      <h3><i class="fa-solid fa-list-check"></i> Danh Sách Gói Tập Hiện Có (<%= packages.length %>)</h3>
+  <!-- Packages List Table -->
+  <div class="glass-card mb-4">
+    <div class="glass-card-header">
+      <div class="card-title-group">
+        <i class="fa-solid fa-list-check text-primary"></i>
+        <h3>Danh Sách Gói Tập Hiện Có (<%= packages.length %>)</h3>
+      </div>
     </div>
     <div class="table-responsive">
-      <table class="table">
+      <table class="enterprise-table">
         <thead>
           <tr>
             <th>Mã</th>
-            <th>Tên Gói</th>
+            <th>Tên Gói Tập</th>
             <th>Danh Mục</th>
             <th>Thời Hạn</th>
-            <th>Giá Tiền (VND)</th>
-            <th>Mô Tả & Tiện Ích</th>
+            <th>Học Phí</th>
+            <th>Tiện Ích Đi Kèm</th>
             <th>Trạng Thái</th>
             <th>Thao Tác</th>
           </tr>
@@ -45,26 +75,28 @@
         <tbody>
           <% packages.forEach(pkg => { %>
             <tr>
-              <td>#<%= pkg.id %></td>
-              <td style="font-weight: 700; color: var(--text-primary);"><%= pkg.name %></td>
-              <td><span class="pkg-badge"><%= pkg.category %></span></td>
-              <td><%= pkg.duration_months %> tháng</td>
-              <td style="font-weight: 700; color: var(--primary);">
-                <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(pkg.price) %>
+              <td><span class="mono-text">#<%= pkg.id %></span></td>
+              <td><strong><%= pkg.name %></strong></td>
+              <td><span class="pkg-cat-badge"><%= pkg.category %></span></td>
+              <td><span class="time-badge"><%= pkg.duration_months %> tháng</span></td>
+              <td>
+                <span class="price-highlight">
+                  <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(pkg.price) %>
+                </span>
               </td>
               <td>
-                <div style="font-size: 13px; color: var(--text-muted);"><%= pkg.description %></div>
-                <div style="font-size: 12px; color: var(--success);"><%= pkg.features %></div>
+                <div class="pkg-desc-sub"><%= pkg.description %></div>
+                <div class="pkg-features-pill"><%= pkg.features %></div>
               </td>
               <td>
-                <span class="badge badge-<%= pkg.is_active ? 'active' : 'expired' %>">
+                <span class="status-pill status-<%= pkg.is_active ? 'active' : 'expired' %>">
                   <%= pkg.is_active ? 'Đang mở bán' : 'Tạm ngưng' %>
                 </span>
               </td>
               <td>
                 <form action="/admin/packages/delete/<%= pkg.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa gói tập này?');">
-                  <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">
-                    <i class="fa-solid fa-trash"></i> Xóa
+                  <button type="submit" class="btn-action btn-action-delete" title="Xóa gói tập">
+                    <i class="fa-solid fa-trash"></i>
                   </button>
                 </form>
               </td>
@@ -75,48 +107,54 @@
     </div>
   </div>
 
-  <div id="add-package-card" class="card">
-    <div class="card-header">
-      <h3><i class="fa-solid fa-plus-circle"></i> Thêm Gói Tập Mới</h3>
+  <!-- Add Package Form -->
+  <div id="add-package-card" class="glass-card">
+    <div class="glass-card-header">
+      <div class="card-title-group">
+        <i class="fa-solid fa-plus-circle text-primary"></i>
+        <h3>Thêm Gói Tập Mới</h3>
+      </div>
     </div>
-    <form action="/admin/packages/add" method="POST" class="admin-form">
-      <div class="form-row">
+    <form action="/admin/packages/add" method="POST" class="admin-form-styled">
+      <div class="form-row-grid">
         <div class="form-group">
-          <label>Tên Gói Tập (*)</label>
-          <input type="text" name="name" class="form-control" placeholder="Ví dụ: Gói Platinum 6 Tháng" required>
+          <label class="form-label">Tên Gói Tập (*)</label>
+          <input type="text" name="name" class="form-control" placeholder="Ví dụ: Gói Platinum Thượng Hạng" required>
         </div>
         <div class="form-group">
-          <label>Danh Mục (*)</label>
+          <label class="form-label">Danh Mục Bộ Môn (*)</label>
           <select name="category" class="form-control">
-            <option value="Gym">Gym Cơ Bản</option>
-            <option value="Yoga">Yoga Chuyên Sâu</option>
-            <option value="Boxing">Boxing & Kickfit</option>
-            <option value="VIP">VIP Toàn Năng</option>
+            <option value="Gym">Gym & Thể Hình</option>
+            <option value="Yoga">Yoga & Trị Liệu</option>
+            <option value="Boxing">KickFit & Boxing</option>
+            <option value="VIP">VIP All-Access</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Thời Hạn (Tháng) (*)</label>
+          <label class="form-label">Thời Hạn (Tháng) (*)</label>
           <input type="number" name="duration_months" class="form-control" value="1" min="1" max="60" required>
         </div>
         <div class="form-group">
-          <label>Học Phí (VNĐ) (*)</label>
+          <label class="form-label">Học Phí (VNĐ) (*)</label>
           <input type="number" name="price" class="form-control" placeholder="Ví dụ: 800000" min="0" step="10000" required>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Mô Tả Ngắn</label>
+        <label class="form-label">Mô Tả Định Hướng</label>
         <input type="text" name="description" class="form-control" placeholder="Tự do tập luyện không giới hạn khung giờ...">
       </div>
 
       <div class="form-group">
-        <label>Tiện Ích Đi Kèm (ngăn cách bởi dấu phẩy)</label>
-        <input type="text" name="features" class="form-control" placeholder="Tủ đồ riêng, Nước uống ion, Xông hơi Sauna, Đo InBody định kỳ">
+        <label class="form-label">Các Tiện Ích Đi Kèm (ngăn cách bởi dấu phẩy)</label>
+        <input type="text" name="features" class="form-control" placeholder="Khăn tập riêng, Tủ locker thông minh, Đo InBody miễn phí, Xông hơi Sauna đá muối">
       </div>
 
-      <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
-        <i class="fa-solid fa-floppy-disk"></i> Lưu Gói Tập Mới
-      </button>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-md btn-glow">
+          <i class="fa-solid fa-floppy-disk"></i> Lưu Gói Tập Mới
+        </button>
+      </div>
     </form>
   </div>
 </div>
