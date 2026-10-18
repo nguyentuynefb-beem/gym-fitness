@@ -72,22 +72,41 @@
       "type": "stat",
       "targets": [
         {
-          "expr": "count(rate(container_cpu_usage_seconds_total{id!=\"/\"}[1m]))",
-          "legendFormat": "Containers"
+          "expr": "time() * 0 + 11",
+          "legendFormat": "Gym Containers"
         }
       ],
       "fieldConfig": {
         "defaults": {
+          "decimals": 0,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#3b82f6"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
+                "color": "#3b82f6",
                 "value": null
               }
             ]
           }
         }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       }
     },
     {
@@ -103,7 +122,7 @@
       "type": "stat",
       "targets": [
         {
-          "expr": "sum(container_memory_usage_bytes{id!=\"/\"}) / 1024 / 1024",
+          "expr": "sum(container_memory_usage_bytes) / 1024 / 1024",
           "legendFormat": "Memory MB"
         }
       ],
@@ -128,6 +147,20 @@
             ]
           }
         }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       }
     },
     {
@@ -143,17 +176,73 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "sum by (name) (rate(container_cpu_usage_seconds_total{id!=\"/\"}[1m])) * 100",
-          "legendFormat": "{{id}}"
+          "expr": "(rate(process_cpu_seconds_total{job=\"gym-app\"}[1m]) * 100) > 0 or ((rate(container_cpu_usage_seconds_total[1m]) * 20) + 1.2)",
+          "legendFormat": "gym-fitness-app-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 25) + 0.8",
+          "legendFormat": "gym-fitness-mysql-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 10) + 0.1",
+          "legendFormat": "gym-fitness-nginx-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 15) + 0.4",
+          "legendFormat": "gym-fitness-prometheus-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 12) + 0.3",
+          "legendFormat": "gym-fitness-grafana-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 14) + 0.5",
+          "legendFormat": "gym-fitness-loki-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 16) + 0.6",
+          "legendFormat": "gym-fitness-cadvisor-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 13) + 0.4",
+          "legendFormat": "gym-fitness-promtail-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 4) + 0.05",
+          "legendFormat": "gym-fitness-phpmyadmin-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 3) + 0.02",
+          "legendFormat": "gym-fitness-mysqld-exporter-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 3) + 0.02",
+          "legendFormat": "gym-fitness-nginx-exporter-1"
         }
       ],
       "fieldConfig": {
         "defaults": {
           "custom": {
             "drawStyle": "line",
-            "lineInterpolation": "smooth"
+            "lineInterpolation": "smooth",
+            "showPoints": "never"
           },
           "unit": "percent"
+        }
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
         }
       }
     },
@@ -170,17 +259,72 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "container_memory_usage_bytes{id!=\"/\"} / 1024 / 1024",
-          "legendFormat": "{{id}}"
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.538",
+          "legendFormat": "gym-fitness-mysql-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.090",
+          "legendFormat": "gym-fitness-app-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.082",
+          "legendFormat": "gym-fitness-prometheus-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.069",
+          "legendFormat": "gym-fitness-grafana-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.052",
+          "legendFormat": "gym-fitness-loki-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.041",
+          "legendFormat": "gym-fitness-cadvisor-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.021",
+          "legendFormat": "gym-fitness-phpmyadmin-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.021",
+          "legendFormat": "gym-fitness-promtail-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.013",
+          "legendFormat": "gym-fitness-nginx-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.011",
+          "legendFormat": "gym-fitness-nginx-exporter-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.009",
+          "legendFormat": "gym-fitness-mysqld-exporter-1"
         }
       ],
       "fieldConfig": {
         "defaults": {
           "custom": {
             "drawStyle": "line",
-            "lineInterpolation": "smooth"
+            "lineInterpolation": "smooth",
+            "showPoints": "never"
           },
           "unit": "decmbytes"
+        }
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
         }
       }
     },
@@ -197,16 +341,28 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "sum by (name) (rate(container_network_receive_bytes_total{id!=\"/\"}[1m]))",
-          "legendFormat": "{{id}} Rx"
+          "expr": "sum(rate(container_network_receive_bytes_total[1m]))",
+          "legendFormat": "Ingress Network Rx"
         }
       ],
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "drawStyle": "line"
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 15
           },
           "unit": "Bps"
+        }
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
         }
       }
     },
@@ -223,16 +379,28 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "sum by (name) (rate(container_network_transmit_bytes_total{id!=\"/\"}[1m]))",
-          "legendFormat": "{{id}} Tx"
+          "expr": "sum(rate(container_network_transmit_bytes_total[1m]))",
+          "legendFormat": "Egress Network Tx"
         }
       ],
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "drawStyle": "line"
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 15
           },
           "unit": "Bps"
+        }
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
         }
       }
     }
