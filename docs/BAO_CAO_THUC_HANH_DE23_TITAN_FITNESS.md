@@ -81,7 +81,7 @@ Mặc dù đã nỗ lực nghiên cứu và hoàn thiện hệ thống một cá
     - 10.3. Kiểm thử tự động hóa kịch bản bảo mật (security-audit.sh: 5/5 PASS)
 11. [HƯỚNG DẪN DEMO VÀ VẬN HÀNH HỆ THỐNG](#11-hướng-dẫn-demo-và-vận-hành-hệ-thống)
     - 11.1. Các bước khởi động hệ thống từ trạng thái sạch
-    - 11.2. Kịch bản Demo thực tế 7 bước bảo vệ đồ án
+    - 11.2. Kịch bản Demo thực tế 8 bước bảo vệ đồ án
     - 11.3. Quy trình dừng và giải phóng hệ thống
     - 11.4. Bộ câu hỏi vấn đáp chuyên sâu và hướng dẫn trả lời
 12. [KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN](#12-kết-luận-và-hướng-phát-triển)
@@ -697,17 +697,24 @@ File `README.md` tại thư mục gốc đóng vai trò như một cẩm nang v�
 
 ## 10.2. Kiểm thử dữ liệu và các luồng nghiệp vụ trên Web
 
-- Thử nghiệm đăng ký gói tập từ form Trang chủ: Điền thông tin khách hàng mới $ightarrow$ Kiểm tra CSDL qua phpMyAdmin $ightarrow$ Bản ghi xuất hiện ngay lập tức trong bảng `trial_registrations`.
+- Thử nghiệm đăng ký gói tập từ form Trang chủ: Điền thông tin khách hàng mới $
+ightarrow$ Kiểm tra CSDL qua phpMyAdmin $
+ightarrow$ Bản ghi xuất hiện ngay lập tức trong bảng `trial_registrations`.
 - Thử nghiệm thêm mới hội viên trên Admin Dashboard: Thông tin hội viên mới lập tức hiển thị trên giao diện và lưu trữ vĩnh viễn trên volume `mysql_data`.
 
 ## 10.3. Kiểm thử tự động hóa kịch bản bảo mật (security-audit.sh: 5/5 PASS)
 
 Kịch bản `security-audit.sh` được lập trình để thực hiện 5 bài kiểm tra nghiêm ngặt:
-1. `[TEST 1/5]` Quét cổng MySQL 3306 từ ngoài Host $ightarrow$ **PASS (Connection Refused)**.
-2. `[TEST 2/5]` Bắn liên tiếp 30 requests vào `/admin` $ightarrow$ **PASS (24/30 request bị chặn với HTTP 429)**.
-3. `[TEST 3/5]` Quét 8 tiêu đề bảo mật Nginx Ingress $ightarrow$ **PASS (8/8 Security Headers hiện diện)**.
-4. `[TEST 4/5]` Kiểm tra danh tính tài khoản container $ightarrow$ **PASS (UID=1000 node, Non-root)**.
-5. `[TEST 5/5]` Kiểm tra trần tài nguyên Cgroups $ightarrow$ **PASS (Toàn bộ container có limit CPU/RAM)**.
+1. `[TEST 1/5]` Quét cổng MySQL 3306 từ ngoài Host $
+ightarrow$ **PASS (Connection Refused)**.
+2. `[TEST 2/5]` Bắn liên tiếp 30 requests vào `/admin` $
+ightarrow$ **PASS (24/30 request bị chặn với HTTP 429)**.
+3. `[TEST 3/5]` Quét 8 tiêu đề bảo mật Nginx Ingress $
+ightarrow$ **PASS (8/8 Security Headers hiện diện)**.
+4. `[TEST 4/5]` Kiểm tra danh tính tài khoản container $
+ightarrow$ **PASS (UID=1000 node, Non-root)**.
+5. `[TEST 5/5]` Kiểm tra trần tài nguyên Cgroups $
+ightarrow$ **PASS (Toàn bộ container có limit CPU/RAM)**.
 
 ---
 *(Vị trí dán ảnh minh chứng)*
@@ -719,7 +726,7 @@ Kịch bản `security-audit.sh` được lập trình để thực hiện 5 bà
 |                                                                         |
 +-------------------------------------------------------------------------+
 ```
-**【 Ảnh 10.1 – Trạng thái Vận hành Ổn định và Khỏe mạnh của 10 Container 】**
+**【 Ảnh 10.1 – Trạng thái Vận hành Ổn định và Khỏe mạnh của 11 Container 】**
 
 ---
 *(Vị trí dán ảnh minh chứng)*
@@ -751,28 +758,31 @@ Kịch bản `security-audit.sh` được lập trình để thực hiện 5 bà
    ```bash
    docker compose up -d
    ```
-4. Xác nhận trạng thái vận hành của 10 container:
+4. Xác nhận trạng thái vận hành của 11 container:
    ```bash
    docker compose ps
    ```
 
-## 11.2. Kịch bản Demo thực tế 7 bước bảo vệ đồ án
+## 11.2. Kịch bản Demo thực tế 8 bước bảo vệ đồ án
 
-- **Bước 1 (Giao diện Web):** Mở trình duyệt truy cập `http://localhost`, chỉ cho giảng viên thấy trình duyệt tự động chuyển sang `https://localhost` (Mã 301) kèm ổ khóa xanh HTTPS hợp lệ. Thao tác gửi form đăng ký tập thử.
-- **Bước 2 (CSDL phpMyAdmin):** Mở `https://localhost/pma/`, đăng nhập và mở bảng `trial_registrations` để chứng minh đơn đăng ký ở Bước 1 đã được ghi nhận vào CSDL.
-- **Bước 3 (Giám sát Prometheus):** Truy cập `http://localhost:9090/targets`, chứng minh 5/5 targets đang ở trạng thái xanh `UP`.
-- **Bước 4 (Bảng điều khiển Grafana):** Truy cập `http://localhost:3001`, trình diễn 4 Dashboards (App, MySQL, Nginx, cAdvisor), chỉ rõ đồ thị CPU, RAM và số lượng request.
-- **Bước 5 (Truy vấn Log Loki):** Mở Grafana Explore, thực thi truy vấn `{job="nginx"}` để giảng viên thấy log vừa sinh ra khi truy cập web.
-- **Bước 6 (Trình diễn Hardening & Chống DoS):** Mở Terminal chạy lệnh kích hoạt Rate Limit:
-  ```bash
-  for i in {1..15}; do curl -k -s -o /dev/null -w "%{http_code} " https://localhost/admin; done
-  ```
-  Chỉ cho giảng viên thấy màn hình xuất hiện mã **429**, sau đó quay lại Grafana Explore gõ truy vấn `{job="nginx"} |= "429"` để thấy dòng log chặn tấn công.
-- **Bước 7 (Báo cáo Bảo mật Tự động):** Chạy lệnh:
-  ```bash
-  ./security-audit.sh
-  ```
-  Để màn hình xuất ra kết quả **5/5 PASS** tuyệt đối trước hội đồng.
+- **Bước 1 (Website Titan Fitness):** Mở trình duyệt truy cập `https://localhost`, giới thiệu giao diện Dark Luxury của phòng tập gym, danh mục các gói tập, đội ngũ huấn luyện viên PT, thời khóa biểu và thực hiện điền thông tin gửi form đăng ký tập thử 7 ngày miễn phí.
+- **Bước 2 (CSDL phpMyAdmin):** Mở tab trình duyệt truy cập `https://localhost/pma/`, đăng nhập và mở CSDL `gym_db`, kiểm tra bảng `trial_registrations` để chứng minh dữ liệu vừa đăng ký ở Bước 1 đã được lưu trữ tức thời vào MySQL 8.4.
+- **Bước 3 (Nginx Ingress & SSL HTTPS):** Kiểm tra vai trò cổng Ingress Gateway của Nginx: truy cập thử `http://localhost` để giảng viên thấy trình duyệt tự động chuyển hướng 301 sang `https://localhost`, mở popup xem thông tin chứng chỉ SSL tự ký có đầy đủ Subject Alternative Name (SAN: `localhost`, `127.0.0.1`), và kiểm tra bộ 8 tiêu đề bảo mật Security Headers (F12 Network hoặc lệnh cURL).
+- **Bước 4 (Giám sát Prometheus):** Truy cập `http://localhost:9090/targets`, chứng minh toàn bộ 5/5 targets (`titan-fitness-app`, `mysql`, `nginx`, `cadvisor`, `prometheus`) đều đang hoạt động hoàn hảo ở trạng thái màu xanh **UP**.
+- **Bước 5 (Trực quan hóa Grafana):** Truy cập `http://localhost:3001`, trình diễn 4 Dashboards chuyên sâu (Node.js Application, MySQL Overview, Nginx Gateway, Docker Containers cAdvisor) với các biểu đồ tải CPU, RAM, lưu lượng Network I/O và số lượng HTTP requests biến động trực quan theo thời gian thực.
+- **Bước 6 (Quản trị Log tập trung Loki & LogQL):** Mở Grafana Explore, chọn Data Source Loki và thực thi các câu truy vấn LogQL mẫu như `{job="nginx"}` và `{job="app"}` để thấy các dòng log vừa phát sinh khi thao tác trên web, minh chứng cơ chế thu thập log tự động của Promtail.
+- **Bước 7 (Bảo mật Hardening Đa tầng):** Trình diễn 2 kịch bản an ninh then chốt:
+  1. Kích hoạt Rate Limiting chống tấn công DoS/Brute-force bằng lệnh:
+     ```bash
+     for i in {1..15}; do curl -k -s -o /dev/null -w "%{http_code} " https://localhost/admin; done
+     ```
+     Chỉ cho giảng viên thấy màn hình xuất hiện mã **HTTP 429 (Too Many Requests)**, sau đó vào Grafana Explore gõ `{job="nginx"} |= "429"` để thấy dòng log ghi nhận sự kiện chặn tấn công.
+  2. Chạy kịch bản kiểm tra bảo mật tự động:
+     ```bash
+     ./security-audit.sh
+     ```
+     Màn hình xuất ra kết quả **5/5 PASS** tuyệt đối (cô lập CSDL, chặn DoS, Security Headers, Non-root UID 1000, Cgroups limits).
+- **Bước 8 (Mã nguồn GitHub & Tài liệu README):** Mở trình duyệt xem Repository GitHub của dự án (`https://github.com/nguyentuynefb-beem/gym-fitness`), giới thiệu quy trình phân nhánh Git Flow (từ `feature/day01` đến `feature/day07`), lịch sử commit chuẩn hóa Conventional Commits, tài liệu hướng dẫn vận hành chi tiết `README.md` và kiểm tra file `.gitignore` để chứng minh bí mật mật khẩu `.env` được bảo vệ tuyệt đối.
 
 ## 11.3. Quy trình dừng và giải phóng hệ thống
 
@@ -801,7 +811,7 @@ docker compose down
 |                                                                         |
 +-------------------------------------------------------------------------+
 ```
-**【 Ảnh 11.1 – Sơ đồ Trình tự 7 Bước Thực hiện Kịch bản Demo Trực tiếp trước Giảng viên 】**
+**【 Ảnh 11.1 – Sơ đồ Trình tự 8 Bước Thực hiện Kịch bản Demo Trực tiếp trước Giảng viên 】**
 
 ---
 
@@ -849,6 +859,6 @@ Dưới đây là bảng tổng hợp danh mục toàn bộ **20 hình ảnh min
 | **15**| **Ảnh 8.2** | Kết quả kịch bản bảo mật `security-audit.sh` (5/5 PASS) | Chương 8 | Minh chứng vượt qua 5 bài test an toàn thông tin. |
 | **16**| **Ảnh 9.1** | Giao diện Kho lưu trữ GitHub của Dự án Titan Fitness | Chương 9 | Minh chứng quản lý mã nguồn trên GitHub. |
 | **17**| **Ảnh 9.2** | Lịch sử Commit và Hệ thống Nhánh Git Flow Chuẩn hóa | Chương 9 | Minh chứng quy trình phát triển chuyên nghiệp. |
-| **18**| **Ảnh 10.1**| Trạng thái Vận hành Ổn định của 10 Container (`docker compose ps`)| Chương 10| Minh chứng sức khỏe các dịch vụ hệ thống. |
+| **18**| **Ảnh 10.1**| Trạng thái Vận hành Ổn định của 11 Container (`docker compose ps`)| Chương 10| Minh chứng sức khỏe các dịch vụ hệ thống. |
 | **19**| **Ảnh 10.2**| Kết quả Kiểm thử Thao tác Đăng ký Thành viên Mới | Chương 10| Minh chứng luồng dữ liệu thông suốt Web - DB. |
-| **20**| **Ảnh 11.1**| Sơ đồ Trình tự 7 Bước Thực hiện Kịch bản Live Demo | Chương 11| Minh chứng kịch bản bảo vệ đồ án trước GVHD. |
+| **20**| **Ảnh 11.1**| Sơ đồ Trình tự 8 Bước Thực hiện Kịch bản Live Demo | Chương 11| Minh chứng kịch bản bảo vệ đồ án trước GVHD. |
