@@ -14,124 +14,114 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     .container {
-      max-width: 1480px;
+      max-width: 1540px;
       width: 100%;
       background: white;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       border-radius: 16px;
-      padding: 10px;
+      padding: 15px;
+      box-sizing: border-box;
       overflow: hidden;
-    }
-    .header {
-      margin-bottom: 12px;
-      text-align: center;
-    }
-    .header h2 {
-      margin: 0 0 6px 0;
-      color: #1e3a8a;
-    }
-    .header p {
-      margin: 0;
-      color: #64748b;
-      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h2>HÌNH 3.1: SƠ ĐỒ KIẾN TRÚC HỆ THỐNG TITAN FITNESS</h2>
-      <p>Docker Compose – 11 Microservices – Mạng Ingress & Backend Cô lập</p>
-    </div>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 1020" width="100%" height="100%" style="background-color: #f8fafc; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1520 1020" width="100%" height="100%" style="background-color: #f8fafc; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;">
   <defs>
     <!-- Shadow filter for modern cards -->
     <filter id="card-shadow" x="-5%" y="-5%" width="112%" height="114%" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.07" />
     </filter>
     <filter id="badge-shadow" x="-4%" y="-4%" width="108%" height="112%" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.06" />
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.05" />
     </filter>
 
     <!-- Arrow markers -->
     <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563eb" />
     </marker>
-    <marker id="arrow-blue-both" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563eb" />
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626" />
     </marker>
-    <marker id="arrow-dash-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#3b82f6" />
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#9333ea" />
     </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#16a34a" />
+    <marker id="arrow-pink" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#db2777" />
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ea580c" />
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0d9488" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#d97706" />
     </marker>
   </defs>
 
   <!-- ==================== HEADER TITLE ==================== -->
-  <g transform="translate(440, 20)">
-    <rect x="0" y="0" width="600" height="74" rx="14" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2" filter="url(#card-shadow)" />
-    <text x="300" y="32" text-anchor="middle" font-size="22" font-weight="700" fill="#0369a1" letter-spacing="0.5">Sơ đồ kiến trúc hệ thống</text>
-    <text x="300" y="58" text-anchor="middle" font-size="15" font-weight="600" fill="#0284c7">(Docker Compose – 11 Services – Titan Fitness)</text>
+  <g transform="translate(460, 16)">
+    <rect x="0" y="0" width="600" height="68" rx="14" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2" filter="url(#card-shadow)" />
+    <text x="300" y="30" text-anchor="middle" font-size="22" font-weight="700" fill="#0369a1" letter-spacing="0.5">Sơ đồ kiến trúc hệ thống</text>
+    <text x="300" y="54" text-anchor="middle" font-size="14.5" font-weight="600" fill="#0284c7">(Docker Compose – 11 Services – Titan Fitness)</text>
   </g>
 
   <!-- ==================== EXTERNAL CLIENTS & INTERNET ==================== -->
   <!-- User / Browser -->
-  <g transform="translate(30, 150)">
-    <!-- User Icon Circle -->
-    <circle cx="50" cy="45" r="32" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.5" />
-    <!-- User Avatar SVG -->
-    <circle cx="50" cy="36" r="12" fill="#3b82f6" />
-    <path d="M 30 57 C 30 48, 40 46, 50 46 C 60 46, 70 48, 70 57 Z" fill="#3b82f6" />
-    <text x="50" y="96" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">Người dùng</text>
-    <text x="50" y="114" text-anchor="middle" font-size="12" fill="#64748b">(Trình duyệt Web)</text>
+  <g transform="translate(25, 140)">
+    <circle cx="45" cy="42" r="30" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.2" />
+    <circle cx="45" cy="33" r="11" fill="#3b82f6" />
+    <path d="M 27 53 C 27 45, 36 43, 45 43 C 54 43, 63 45, 63 53 Z" fill="#3b82f6" />
+    <text x="45" y="90" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1e293b">Người dùng</text>
+    <text x="45" y="106" text-anchor="middle" font-size="11.5" fill="#64748b">(Trình duyệt)</text>
   </g>
 
-  <!-- Flow User to Internet -->
-  <line x1="105" y1="195" x2="145" y2="195" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)" />
+  <!-- Arrow: User -> Internet -->
+  <line x1="95" y1="182" x2="135" y2="182" stroke="#2563eb" stroke-width="2.2" marker-end="url(#arrow-blue)" />
 
   <!-- Internet Globe -->
-  <g transform="translate(155, 160)">
-    <circle cx="35" cy="35" r="26" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" />
-    <circle cx="35" cy="35" r="24" fill="none" stroke="#22c55e" stroke-width="1.5" />
-    <ellipse cx="35" cy="35" rx="12" ry="24" fill="none" stroke="#22c55e" stroke-width="1.5" />
-    <line x1="11" y1="35" x2="59" y2="35" stroke="#22c55e" stroke-width="1.5" />
-    <text x="35" y="86" text-anchor="middle" font-size="13" font-weight="600" fill="#15803d">Internet</text>
+  <g transform="translate(140, 150)">
+    <circle cx="32" cy="32" r="24" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" />
+    <ellipse cx="32" cy="32" rx="11" ry="24" fill="none" stroke="#22c55e" stroke-width="1.5" />
+    <line x1="8" y1="32" x2="56" y2="32" stroke="#22c55e" stroke-width="1.5" />
+    <text x="32" y="78" text-anchor="middle" font-size="12.5" font-weight="600" fill="#15803d">Internet</text>
   </g>
 
-  <!-- Flow Internet to Nginx -->
+  <!-- Arrow: Internet -> Nginx -->
   <g>
-    <line x1="225" y1="195" x2="310" y2="195" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)" />
-    <rect x="225" y="158" width="85" height="26" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
-    <text x="267" y="171" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4ed8">HTTPS :443</text>
-    <text x="267" y="181" text-anchor="middle" font-size="9" fill="#2563eb">HTTP :80 (301)</text>
+    <line x1="205" y1="182" x2="310" y2="182" stroke="#2563eb" stroke-width="2.2" marker-end="url(#arrow-blue)" />
+    <rect x="212" y="148" width="92" height="26" rx="5" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
+    <text x="258" y="161" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1d4ed8">HTTPS :443</text>
+    <text x="258" y="171" text-anchor="middle" font-size="9" fill="#2563eb">HTTP :80 (301)</text>
   </g>
 
   <!-- DevOps / Admin Access below -->
-  <g transform="translate(30, 420)">
-    <circle cx="50" cy="40" r="30" fill="#faf5ff" stroke="#a855f7" stroke-width="2" />
-    <!-- Admin Icon -->
-    <path d="M 40 38 L 40 46 L 60 46 L 60 38 L 56 34 L 56 28 C 56 24 53 22 50 22 C 47 22 44 24 44 28 L 44 34 Z" fill="#9333ea" />
-    <circle cx="50" cy="27" r="4" fill="#ffffff" />
-    <text x="50" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b">Quản trị viên</text>
-    <text x="50" y="104" text-anchor="middle" font-size="11" fill="#64748b">(DevOps / SRE)</text>
+  <g transform="translate(25, 305)">
+    <circle cx="45" cy="40" r="28" fill="#faf5ff" stroke="#a855f7" stroke-width="2" />
+    <path d="M 36 38 L 36 46 L 54 46 L 54 38 L 50 34 L 50 28 C 50 24 48 22 45 22 C 42 22 40 24 40 28 L 40 34 Z" fill="#9333ea" />
+    <circle cx="45" cy="27" r="3.5" fill="#ffffff" />
+    <text x="45" y="86" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b">Quản trị viên</text>
+    <text x="45" y="102" text-anchor="middle" font-size="11" fill="#64748b">(DevOps / SRE)</text>
   </g>
 
-  <!-- Flows Admin to Grafana & Prometheus -->
-  <path d="M 105 460 C 180 460, 220 385, 335 385" fill="none" stroke="#9333ea" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-blue)" />
-  <rect x="180" y="395" width="105" height="20" rx="4" fill="#faf5ff" stroke="#e9d5ff" stroke-width="1" />
-  <text x="232" y="409" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7e22ce">Grafana :3001</text>
+  <!-- Arrow Admin to Host Ports -->
+  <path d="M 95 345 C 160 345, 180 325, 230 325 L 310 325" fill="none" stroke="#9333ea" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-purple)" />
+  <rect x="180" y="308" width="115" height="24" rx="5" fill="#faf5ff" stroke="#e9d5ff" stroke-width="1" />
+  <text x="237" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="#7e22ce">Grafana (:3001)</text>
+  <text x="237" y="329" text-anchor="middle" font-size="9" fill="#9333ea">Prometheus (:9090)</text>
 
   <!-- ==================== MAIN DOCKER CONTAINER BOX ==================== -->
-  <g transform="translate(315, 115)">
+  <g transform="translate(315, 95)">
     <!-- Big dashed container box -->
-    <rect x="0" y="0" width="1135" height="585" rx="22" fill="#ffffff" stroke="#2563eb" stroke-dasharray="10,7" stroke-width="2.5" filter="url(#card-shadow)" />
+    <rect x="0" y="0" width="1175" height="530" rx="20" fill="#ffffff" stroke="#2563eb" stroke-dasharray="10,7" stroke-width="2.5" filter="url(#card-shadow)" />
 
     <!-- Docker badge at top left -->
-    <g transform="translate(20, -18)">
-      <rect x="0" y="0" width="310" height="36" rx="10" fill="#2563eb" />
+    <g transform="translate(20, -17)">
+      <rect x="0" y="0" width="315" height="34" rx="8" fill="#2563eb" />
       <!-- Docker Whale Icon -->
-      <g transform="translate(14, 8) scale(0.8)" fill="#ffffff">
+      <g transform="translate(14, 7) scale(0.75)" fill="#ffffff">
         <rect x="2" y="8" width="3" height="3" rx="0.5"/>
         <rect x="6" y="8" width="3" height="3" rx="0.5"/>
         <rect x="10" y="8" width="3" height="3" rx="0.5"/>
@@ -140,319 +130,347 @@
         <rect x="14" y="8" width="3" height="3" rx="0.5"/>
         <path d="M 0 12 C 1 18, 9 20, 18 19 C 22 18, 25 15, 26 12 C 24 12, 22 13, 20 12 C 18 11, 16 12, 0 12 Z"/>
       </g>
-      <text x="46" y="23" font-size="14.5" font-weight="700" fill="#ffffff" letter-spacing="0.4">Docker Compose (WSL2 – Ubuntu 24.04)</text>
+      <text x="44" y="22" font-size="14" font-weight="700" fill="#ffffff">Docker Compose (WSL2 – Ubuntu 24.04)</text>
     </g>
 
-    <!-- Sub-network boundary tag: Frontend network -->
-    <rect x="15" y="28" width="765" height="152" rx="14" fill="#eff6ff" fill-opacity="0.35" stroke="#93c5fd" stroke-dasharray="6,4" stroke-width="1.2" />
-    <text x="30" y="46" font-size="11" font-weight="700" fill="#3b82f6">MẠNG FRONTEND (Bridge Network)</text>
+    <!-- Sub-network boundary: Backend network (ISOLATED) surrounding MySQL and MySQL Exporter -->
+    <rect x="585" y="32" width="280" height="280" rx="14" fill="#fef2f2" fill-opacity="0.35" stroke="#f87171" stroke-dasharray="6,4" stroke-width="1.5" />
+    <text x="725" y="48" text-anchor="middle" font-size="11" font-weight="700" fill="#dc2626">MẠNG BACKEND CÔ LẬP (internal: true)</text>
 
-    <!-- Sub-network boundary tag: Backend network (ISOLATED) -->
-    <rect x="520" y="28" width="598" height="305" rx="14" fill="#fef2f2" fill-opacity="0.25" stroke="#fca5a5" stroke-dasharray="6,4" stroke-width="1.2" />
-    <text x="895" y="46" font-size="11" font-weight="700" fill="#dc2626">MẠNG BACKEND (internal: true - Cô lập 100%)</text>
+    <!-- Sub-network boundary: Frontend network tag -->
+    <rect x="15" y="32" width="555" height="280" rx="14" fill="#eff6ff" fill-opacity="0.25" stroke="#93c5fd" stroke-dasharray="6,4" stroke-width="1.2" />
+    <text x="30" y="48" font-size="11" font-weight="700" fill="#2563eb">MẠNG FRONTEND (Bridge Network)</text>
 
-    <!-- ==================== ROW 1: CORE APPLICATION & DB SERVICES ==================== -->
+    <!-- ========================================================================= -->
+    <!-- ROW 1 (y = 55): APPLICATION & DATABASE SERVICES                          -->
+    <!-- Layout: [Nginx]  -->  [Node.js App]  <-->  [MySQL 8.4]  <--  [phpMyAdmin]  -->
+    <!-- ========================================================================= -->
 
-    <!-- SERVICE 1: NGINX REVERSE PROXY -->
-    <g transform="translate(30, 50)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="215" height="118" rx="14" fill="#f0fdf4" stroke="#22c55e" stroke-width="2.5" />
-      <!-- Logo Nginx -->
-      <g transform="translate(93, 12)">
-        <polygon points="14,0 28,8 28,24 14,32 0,24 0,8" fill="#16a34a" />
-        <path d="M 9 10 L 19 22 L 19 10 L 21 10 L 21 22 L 11 10 Z" fill="#ffffff" />
+    <!-- SERVICE 1: NGINX REVERSE PROXY (Col 1) -->
+    <g transform="translate(25, 55)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="235" height="105" rx="12" fill="#f0fdf4" stroke="#22c55e" stroke-width="2.2" />
+      <g transform="translate(105, 10)">
+        <polygon points="12,0 24,7 24,21 12,28 0,21 0,7" fill="#16a34a" />
+        <path d="M 8 9 L 16 19 L 16 9 L 18 9 L 18 19 L 10 9 Z" fill="#ffffff" />
       </g>
-      <text x="107" y="60" text-anchor="middle" font-size="16" font-weight="800" fill="#15803d">Nginx 1.27</text>
-      <text x="107" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">(Reverse Proxy &amp; SSL)</text>
-      <!-- Port Badge -->
-      <rect x="25" y="88" width="165" height="22" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1" />
-      <text x="107" y="103" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d">Port 80, 443 (Published Host)</text>
+      <text x="117" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#15803d">Nginx 1.27</text>
+      <text x="117" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#166534">(Reverse Proxy &amp; Ingress)</text>
+      <rect x="25" y="78" width="185" height="20" rx="5" fill="#dcfce7" stroke="#86efac" stroke-width="1" />
+      <text x="117" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#15803d">Port 80, 443 (Published Host)</text>
     </g>
 
-    <!-- SERVICE 2: NODE.JS APP (TITAN FITNESS) -->
-    <g transform="translate(285, 50)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="225" height="118" rx="14" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.5" />
-      <!-- Node.js Logo Hexagon -->
-      <g transform="translate(98, 12)">
-        <polygon points="14,0 28,8 28,24 14,32 0,24 0,8" fill="#2563eb" />
-        <text x="14" y="21" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">JS</text>
+    <!-- SERVICE 2: NODE.JS APP (Col 2) -->
+    <g transform="translate(325, 55)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="235" height="105" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.2" />
+      <g transform="translate(105, 10)">
+        <polygon points="12,0 24,7 24,21 12,28 0,21 0,7" fill="#2563eb" />
+        <text x="12" y="19" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">JS</text>
       </g>
-      <text x="112" y="60" text-anchor="middle" font-size="16" font-weight="800" fill="#1d4ed8">Node.js App</text>
-      <text x="112" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="#1e40af">(Titan Fitness Website)</text>
-      <!-- Port Badge -->
-      <rect x="35" y="88" width="155" height="22" rx="6" fill="#dbeafe" stroke="#bfdbfe" stroke-width="1" />
-      <text x="112" y="103" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">Port 3000 (Internal Only)</text>
+      <text x="117" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#1d4ed8">Node.js App</text>
+      <text x="117" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e40af">(Titan Fitness Website)</text>
+      <rect x="30" y="78" width="175" height="20" rx="5" fill="#dbeafe" stroke="#bfdbfe" stroke-width="1" />
+      <text x="117" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e40af">Port 3000 (Internal Frontend)</text>
     </g>
 
-    <!-- SERVICE 3: PHPMYADMIN -->
-    <g transform="translate(550, 50)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="225" height="118" rx="14" fill="#f0f9ff" stroke="#0284c7" stroke-width="2.5" />
-      <!-- phpMyAdmin Sailboat Logo -->
-      <g transform="translate(98, 12)">
-        <path d="M 4 24 L 24 24 L 20 28 L 8 28 Z" fill="#0284c7" />
-        <path d="M 14 6 L 14 22 L 24 22 Z" fill="#38bdf8" />
-        <path d="M 12 10 L 12 22 L 4 22 Z" fill="#0369a1" />
+    <!-- SERVICE 3: MYSQL 8.4 LTS DATABASE (Col 3) -->
+    <g transform="translate(610, 55)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="230" height="105" rx="12" fill="#fef2f2" stroke="#ef4444" stroke-width="2.2" />
+      <g transform="translate(103, 10)">
+        <path d="M 0 14 C 4 5, 15 3, 22 7 C 24 8, 20 14, 17 15 C 12 16, 8 19, 10 24 C 6 22, 3 20, 0 14 Z" fill="#dc2626" />
       </g>
-      <text x="112" y="60" text-anchor="middle" font-size="16" font-weight="800" fill="#0369a1">phpMyAdmin 5.2</text>
-      <text x="112" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="#075985">(Quản trị CSDL Web)</text>
-      <!-- Port Badge -->
-      <rect x="30" y="88" width="165" height="22" rx="6" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1" />
-      <text x="112" y="103" text-anchor="middle" font-size="11" font-weight="700" fill="#0369a1">Port 80 (Subpath /pma/)</text>
+      <text x="115" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#b91c1c">MySQL 8.4 LTS</text>
+      <text x="115" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#991b1b">(CSDL gym_db – Cô lập)</text>
+      <rect x="25" y="78" width="180" height="20" rx="5" fill="#fee2e2" stroke="#fecaca" stroke-width="1" />
+      <text x="115" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#b91c1c">Port 3306 (internal: true)</text>
     </g>
 
-    <!-- SERVICE 4: MYSQL DATABASE -->
-    <g transform="translate(815, 50)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="280" height="118" rx="14" fill="#fef2f2" stroke="#ef4444" stroke-width="2.5" />
-      <!-- MySQL Dolphin Logo Silhouette -->
-      <g transform="translate(126, 12)">
-        <path d="M 0 16 C 5 6, 18 4, 26 8 C 28 10, 24 16, 20 18 C 14 19, 10 22, 12 28 C 8 26, 4 24, 0 16 Z" fill="#dc2626" />
+    <!-- SERVICE 4: PHPMYADMIN (Col 4) -->
+    <g transform="translate(905, 55)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="240" height="105" rx="12" fill="#f0f9ff" stroke="#0284c7" stroke-width="2.2" />
+      <g transform="translate(108, 10)">
+        <path d="M 3 20 L 21 20 L 17 24 L 7 24 Z" fill="#0284c7" />
+        <path d="M 12 5 L 12 18 L 21 18 Z" fill="#38bdf8" />
+        <path d="M 10 8 L 10 18 L 3 18 Z" fill="#0369a1" />
       </g>
-      <text x="140" y="60" text-anchor="middle" font-size="16" font-weight="800" fill="#b91c1c">MySQL 8.4 LTS</text>
-      <text x="140" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="#991b1b">(CSDL gym_db – Cô lập hoàn toàn)</text>
-      <!-- Port Badge -->
-      <rect x="30" y="88" width="220" height="22" rx="6" fill="#fee2e2" stroke="#fecaca" stroke-width="1" />
-      <text x="140" y="103" text-anchor="middle" font-size="11" font-weight="700" fill="#b91c1c">Port 3306 (KHÔNG Publish Host)</text>
+      <text x="120" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#0369a1">phpMyAdmin 5.2</text>
+      <text x="120" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#075985">(Quản trị CSDL Web)</text>
+      <rect x="30" y="78" width="180" height="20" rx="5" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1" />
+      <text x="120" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0369a1">Port 80 (Subpath /pma/)</text>
     </g>
 
-    <!-- ARROWS BETWEEN ROW 1 SERVICES -->
-    <!-- Nginx <-> Node.js App -->
-    <line x1="245" y1="109" x2="285" y2="109" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)" />
-    <!-- Nginx -> phpMyAdmin (Proxy subpath) -->
-    <path d="M 137 168 L 137 195 L 662 195 L 662 168" fill="none" stroke="#0284c7" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-dash-blue)" />
-    <rect x="360" y="185" width="125" height="18" rx="4" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
-    <text x="422" y="198" text-anchor="middle" font-size="10" font-weight="600" fill="#0369a1">Proxy Pass: /pma/</text>
+    <!-- ==================== ROW 1 ARROWS (TOTALLY CLEAN & SEPARATED) ==================== -->
+    
+    <!-- 1. Nginx <-> Node.js App -->
+    <line x1="260" y1="107" x2="325" y2="107" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)" />
+    <rect x="267" y="87" width="52" height="18" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="0.8" />
+    <text x="293" y="100" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1d4ed8">Proxy /</text>
 
-    <!-- Node.js App <-> MySQL -->
-    <line x1="510" y1="100" x2="815" y2="100" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)" />
-    <rect x="625" y="88" width="115" height="20" rx="4" fill="#fee2e2" stroke="#fca5a5" stroke-width="1"/>
-    <text x="682" y="102" text-anchor="middle" font-size="10.5" font-weight="700" fill="#b91c1c">Kết nối SQL (CRUD)</text>
+    <!-- 2. Node.js App <-> MySQL 8.4 (CORRECTED: Sits cleanly in 50px gap between Col 2 and Col 3) -->
+    <line x1="560" y1="107" x2="610" y2="107" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrow-red)" marker-start="url(#arrow-red)" />
+    <rect x="564" y="84" width="42" height="20" rx="4" fill="#fef2f2" stroke="#fca5a5" stroke-width="0.8" />
+    <text x="585" y="94" text-anchor="middle" font-size="8.5" font-weight="700" fill="#b91c1c">SQL</text>
+    <text x="585" y="102" text-anchor="middle" font-size="7.5" font-weight="700" fill="#dc2626">CRUD</text>
 
-    <!-- phpMyAdmin -> MySQL -->
-    <line x1="775" y1="109" x2="815" y2="109" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow-blue)" />
+    <!-- 3. phpMyAdmin -> MySQL 8.4 -->
+    <line x1="905" y1="107" x2="840" y2="107" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arrow-blue)" />
+    <rect x="848" y="87" width="50" height="18" rx="4" fill="#f0f9ff" stroke="#bae6fd" stroke-width="0.8" />
+    <text x="873" y="100" text-anchor="middle" font-size="9" font-weight="700" fill="#0369a1">Quản trị</text>
 
-    <!-- ==================== ROW 2: MONITORING CLUSTER & EXPORTERS ==================== -->
+    <!-- 4. Nginx -> phpMyAdmin (Proxy subpath: arches gracefully above Row 1, NO INTERSECTIONS) -->
+    <path d="M 142 55 L 142 20 L 1025 20 L 1025 55" fill="none" stroke="#0284c7" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow-blue)" />
+    <rect x="525" y="10" width="130" height="20" rx="5" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1" />
+    <text x="590" y="24" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0369a1">Proxy Pass: /pma/</text>
 
-    <!-- SERVICE 6: GRAFANA DASHBOARDS -->
-    <g transform="translate(145, 230)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="220" height="118" rx="14" fill="#fff7ed" stroke="#f97316" stroke-width="2.5" />
-      <!-- Grafana Spiral Logo -->
-      <g transform="translate(96, 12)">
-        <circle cx="14" cy="14" r="12" fill="#ea580c" />
-        <path d="M 10 14 C 10 10, 18 10, 18 14 C 18 18, 12 18, 12 14" fill="none" stroke="#ffffff" stroke-width="2" />
+    <!-- ========================================================================= -->
+    <!-- ROW 2 (y = 205): MONITORING CLUSTER & EXPORTERS                           -->
+    <!-- Layout: [Nginx Exp]  -->  [Prometheus]  <--  [MySQL Exp]  <-->  [Grafana] -->
+    <!-- ========================================================================= -->
+
+    <!-- SERVICE 11: NGINX EXPORTER (Col 1) -->
+    <g transform="translate(25, 205)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="235" height="105" rx="12" fill="#f0fdfa" stroke="#14b8a6" stroke-width="2.2" />
+      <circle cx="117" cy="22" r="13" fill="#0d9488" />
+      <text x="117" y="27" text-anchor="middle" font-size="11.5" font-weight="800" fill="#ffffff">NX</text>
+      <text x="117" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#0f766e">Nginx Exporter</text>
+      <text x="117" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#115e59">(Metrics Ingress Traffic)</text>
+      <rect x="35" y="78" width="165" height="20" rx="5" fill="#ccfbf1" stroke="#99f6e4" stroke-width="1" />
+      <text x="117" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f766e">Port 9113 (Internal)</text>
+    </g>
+
+    <!-- SERVICE 5: PROMETHEUS SERVER (Col 2) -->
+    <g transform="translate(325, 205)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="235" height="105" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5" />
+      <g transform="translate(105, 9)">
+        <circle cx="12" cy="12" r="11" fill="#9333ea" />
+        <path d="M 12 4 C 9 8, 7 12, 10 16 C 12 19, 17 17, 16 12 C 16 9, 14 6, 12 4 Z" fill="#ffffff" />
       </g>
-      <text x="110" y="60" text-anchor="middle" font-size="16" font-weight="800" fill="#c2410c">Grafana 11.2</text>
-      <text x="110" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="#9a3412">(4 Dashboards trực quan)</text>
-      <!-- Port Badge -->
-      <rect x="25" y="88" width="170" height="22" rx="6" fill="#ffedd5" stroke="#fed7aa" stroke-width="1" />
-      <text x="110" y="103" text-anchor="middle" font-size="11" font-weight="700" fill="#c2410c">Port 3001 (Published Host)</text>
+      <text x="117" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#7e22ce">Prometheus 2.54</text>
+      <text x="117" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#6b21a8">(Thu thập 5/5 Targets UP)</text>
+      <rect x="25" y="78" width="185" height="20" rx="5" fill="#f3e8ff" stroke="#e9d5ff" stroke-width="1" />
+      <text x="117" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7e22ce">Port 9090 (Published Host)</text>
     </g>
 
-    <!-- SERVICE 5: PROMETHEUS MONITORING -->
-    <g transform="translate(450, 230)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="235" height="118" rx="14" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5" />
-      <!-- Prometheus Flame Logo -->
-      <g transform="translate(104, 12)">
-        <circle cx="14" cy="14" r="13" fill="#9333ea" />
-        <path d="M 14 5 C 10 10, 8 14, 11 19 C 14 23, 19 21, 18 15 C 18 11, 16 8, 14 5 Z" fill="#ffffff" />
+    <!-- SERVICE 10: MYSQL EXPORTER (Col 3) -->
+    <g transform="translate(610, 205)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="230" height="105" rx="12" fill="#fefce8" stroke="#eab308" stroke-width="2.2" />
+      <circle cx="115" cy="22" r="13" fill="#ca8a04" />
+      <ellipse cx="115" cy="19" rx="7" ry="2.5" fill="#ffffff" />
+      <path d="M 108 19 L 108 25 C 108 27, 122 27, 122 25 L 122 19 Z" fill="#ffffff" />
+      <text x="115" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#a16207">MySQL Exporter</text>
+      <text x="115" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#854d0e">(Chỉ số CSDL MySQL)</text>
+      <rect x="35" y="78" width="160" height="20" rx="5" fill="#fef9c3" stroke="#fde047" stroke-width="1" />
+      <text x="115" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#a16207">Port 9104 (Internal)</text>
+    </g>
+
+    <!-- SERVICE 6: GRAFANA DASHBOARDS (Col 4) -->
+    <g transform="translate(905, 205)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="240" height="105" rx="12" fill="#fff7ed" stroke="#f97316" stroke-width="2.5" />
+      <g transform="translate(108, 9)">
+        <circle cx="12" cy="12" r="11" fill="#ea580c" />
+        <path d="M 9 12 C 9 9, 15 9, 15 12 C 15 15, 11 15, 11 12" fill="none" stroke="#ffffff" stroke-width="1.8" />
       </g>
-      <text x="117" y="60" text-anchor="middle" font-size="16" font-weight="800" fill="#7e22ce">Prometheus 2.54</text>
-      <text x="117" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="#6b21a8">(Giám sát 5/5 Targets UP)</text>
-      <!-- Port Badge -->
-      <rect x="25" y="88" width="185" height="22" rx="6" fill="#f3e8ff" stroke="#e9d5ff" stroke-width="1" />
-      <text x="117" y="103" text-anchor="middle" font-size="11" font-weight="700" fill="#7e22ce">Port 9090 (Published Host)</text>
+      <text x="120" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#c2410c">Grafana 11.2</text>
+      <text x="120" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#9a3412">(4 Dashboards trực quan)</text>
+      <rect x="30" y="78" width="180" height="20" rx="5" fill="#ffedd5" stroke="#fed7aa" stroke-width="1" />
+      <text x="120" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#c2410c">Port 3001 (Published Host)</text>
     </g>
 
-    <!-- SERVICE 10: NGINX PROMETHEUS EXPORTER -->
-    <g transform="translate(730, 230)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="170" height="118" rx="14" fill="#f0fdfa" stroke="#14b8a6" stroke-width="2.2" />
-      <circle cx="85" cy="26" r="14" fill="#0d9488" />
-      <text x="85" y="32" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">NX</text>
-      <text x="85" y="60" text-anchor="middle" font-size="14.5" font-weight="800" fill="#0f766e">Nginx Exporter</text>
-      <text x="85" y="78" text-anchor="middle" font-size="11.5" font-weight="600" fill="#115e59">(Metrics Ingress)</text>
-      <rect x="20" y="88" width="130" height="22" rx="6" fill="#ccfbf1" stroke="#99f6e4" stroke-width="1" />
-      <text x="85" y="103" text-anchor="middle" font-size="11" font-weight="700" fill="#0f766e">Port 9113 (Internal)</text>
-    </g>
+    <!-- ==================== VERTICAL & HORIZONTAL EXPORTER FLOWS ==================== -->
+    
+    <!-- Nginx -> Nginx Exporter (Vertical) -->
+    <line x1="142" y1="160" x2="142" y2="205" stroke="#0d9488" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-teal)" />
+    <!-- Node.js App -> Prometheus (Vertical) -->
+    <line x1="442" y1="160" x2="442" y2="205" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-blue)" />
+    <rect x="410" y="172" width="65" height="18" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="0.8" />
+    <text x="442" y="184" text-anchor="middle" font-size="9" font-weight="700" fill="#1d4ed8">/metrics</text>
 
-    <!-- SERVICE 7: MYSQL EXPORTER -->
-    <g transform="translate(930, 230)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="165" height="118" rx="14" fill="#fefce8" stroke="#eab308" stroke-width="2.2" />
-      <!-- DB Metrics icon -->
-      <circle cx="82" cy="26" r="14" fill="#ca8a04" />
-      <ellipse cx="82" cy="22" rx="8" ry="3" fill="#ffffff" />
-      <path d="M 74 22 L 74 29 C 74 31, 90 31, 90 29 L 90 22 Z" fill="#ffffff" />
-      <text x="82" y="60" text-anchor="middle" font-size="14.5" font-weight="800" fill="#a16207">MySQL Exporter</text>
-      <text x="82" y="78" text-anchor="middle" font-size="11.5" font-weight="600" fill="#854d0e">(Metrics CSDL)</text>
-      <rect x="18" y="88" width="130" height="22" rx="6" fill="#fef9c3" stroke="#fde047" stroke-width="1" />
-      <text x="82" y="103" text-anchor="middle" font-size="11" font-weight="700" fill="#a16207">Port 9104 (Internal)</text>
-    </g>
+    <!-- MySQL -> MySQL Exporter (Vertical) -->
+    <line x1="725" y1="160" x2="725" y2="205" stroke="#ca8a04" stroke-width="2" marker-end="url(#arrow-amber)" />
 
-    <!-- PROMETHEUS METRICS COLLECTION FLOWS (DASHED) -->
-    <!-- Grafana -> Prometheus (Query) -->
-    <line x1="365" y1="289" x2="450" y2="289" stroke="#ea580c" stroke-width="2.5" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)" />
-    <!-- Node.js App -> Prometheus (/metrics) -->
-    <path d="M 397 168 L 397 215 L 530 215 L 530 230" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-dash-blue)" />
-    <!-- Nginx -> Nginx Exporter -> Prometheus -->
-    <path d="M 170 168 L 170 205 L 815 205 L 815 230" fill="none" stroke="#0d9488" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-dash-blue)" />
-    <line x1="730" y1="289" x2="685" y2="289" stroke="#a855f7" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-dash-blue)" />
-    <!-- MySQL -> MySQL Exporter -> Prometheus -->
-    <line x1="1012" y1="168" x2="1012" y2="230" stroke="#ca8a04" stroke-width="2" marker-end="url(#arrow-blue)" />
-    <line x1="930" y1="289" x2="880" y2="289" stroke="#a855f7" stroke-width="2" stroke-dasharray="5,4" />
-    <line x1="880" y1="289" x2="685" y2="289" stroke="#a855f7" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-dash-blue)" />
+    <!-- Nginx Exporter -> Prometheus (Horizontal) -->
+    <line x1="260" y1="257" x2="325" y2="257" stroke="#a855f7" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-purple)" />
+    <!-- MySQL Exporter -> Prometheus (Horizontal) -->
+    <line x1="610" y1="257" x2="560" y2="257" stroke="#a855f7" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-purple)" />
 
-    <!-- ==================== ROW 3: CADVISOR, LOKI & PROMTAIL ==================== -->
+    <!-- Prometheus -> Grafana (Underpass corridor between Col 2 and Col 4) -->
+    <path d="M 560 275 L 585 275 L 585 330 L 875 330 L 875 257 L 905 257" fill="none" stroke="#ea580c" stroke-width="2" marker-end="url(#arrow-orange)" />
+    <rect x="690" y="320" width="85" height="18" rx="4" fill="#fff7ed" stroke="#fed7aa" stroke-width="0.8" />
+    <text x="732" y="333" text-anchor="middle" font-size="9.5" font-weight="700" fill="#c2410c">Query Metrics</text>
 
-    <!-- SERVICE 8: CADVISOR CONTAINER METRICS -->
-    <g transform="translate(145, 410)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="220" height="115" rx="14" fill="#ecfeff" stroke="#06b6d4" stroke-width="2.2" />
-      <!-- cAdvisor Owl Logo -->
-      <g transform="translate(96, 12)">
-        <circle cx="14" cy="14" r="13" fill="#0891b2" />
-        <circle cx="10" cy="12" r="4" fill="#ffffff" />
-        <circle cx="18" cy="12" r="4" fill="#ffffff" />
-        <circle cx="10" cy="12" r="2" fill="#0f172a" />
-        <circle cx="18" cy="12" r="2" fill="#0f172a" />
-        <polygon points="14,15 12,18 16,18" fill="#f59e0b" />
+    <!-- ========================================================================= -->
+    <!-- ROW 3 (y = 365): CADVISOR, LOKI, PROMTAIL & LOG VOLUMES                   -->
+    <!-- Layout: [cAdvisor]  -->  [Loki]  <--  [Promtail]  <--  [Log Volumes]       -->
+    <!-- ========================================================================= -->
+
+    <!-- SERVICE 9: CADVISOR CONTAINER METRICS (Col 1) -->
+    <g transform="translate(25, 365)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="235" height="105" rx="12" fill="#ecfeff" stroke="#06b6d4" stroke-width="2.2" />
+      <g transform="translate(105, 9)">
+        <circle cx="12" cy="12" r="11" fill="#0891b2" />
+        <circle cx="8.5" cy="10.5" r="3.5" fill="#ffffff" />
+        <circle cx="15.5" cy="10.5" r="3.5" fill="#ffffff" />
+        <circle cx="8.5" cy="10.5" r="1.5" fill="#0f172a" />
+        <circle cx="15.5" cy="10.5" r="1.5" fill="#0f172a" />
+        <polygon points="12,13 10,16 14,16" fill="#f59e0b" />
       </g>
-      <text x="110" y="58" text-anchor="middle" font-size="16" font-weight="800" fill="#0e7490">cAdvisor 0.49</text>
-      <text x="110" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#155e75">(Giám sát Container)</text>
-      <rect x="30" y="85" width="160" height="22" rx="6" fill="#cffafe" stroke="#a5f3fc" stroke-width="1" />
-      <text x="110" y="100" text-anchor="middle" font-size="11" font-weight="700" fill="#0e7490">Port 8080 (Internal)</text>
+      <text x="117" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#0e7490">cAdvisor 0.49</text>
+      <text x="117" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#155e75">(Giám sát Container)</text>
+      <rect x="35" y="78" width="165" height="20" rx="5" fill="#cffafe" stroke="#a5f3fc" stroke-width="1" />
+      <text x="117" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0e7490">Port 8080 (Internal)</text>
     </g>
 
-    <!-- SERVICE 9: LOKI CENTRALIZED LOGS -->
-    <g transform="translate(450, 410)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="235" height="115" rx="14" fill="#fdf2f8" stroke="#ec4899" stroke-width="2.5" />
-      <!-- Loki Logo Logs -->
-      <g transform="translate(104, 12)">
-        <rect x="2" y="4" width="7" height="22" rx="2" fill="#db2777" />
-        <rect x="11" y="8" width="7" height="18" rx="2" fill="#f472b6" />
-        <rect x="20" y="2" width="7" height="24" rx="2" fill="#9d174d" />
+    <!-- SERVICE 7: LOKI CENTRALIZED LOGS (Col 2) -->
+    <g transform="translate(325, 365)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="235" height="105" rx="12" fill="#fdf2f8" stroke="#ec4899" stroke-width="2.5" />
+      <g transform="translate(105, 9)">
+        <rect x="2" y="3" width="6" height="18" rx="1.5" fill="#db2777" />
+        <rect x="9.5" y="6" width="6" height="15" rx="1.5" fill="#f472b6" />
+        <rect x="17" y="1" width="6" height="20" rx="1.5" fill="#9d174d" />
       </g>
-      <text x="117" y="58" text-anchor="middle" font-size="16" font-weight="800" fill="#be185d">Loki 3.1</text>
-      <text x="117" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#9d174d">(Lưu trữ Log tập trung)</text>
-      <rect x="25" y="85" width="185" height="22" rx="6" fill="#fce7f3" stroke="#fbcfe8" stroke-width="1" />
-      <text x="117" y="100" text-anchor="middle" font-size="11" font-weight="700" fill="#be185d">Port 3100 (Published Host)</text>
+      <text x="117" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#be185d">Loki 3.1</text>
+      <text x="117" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#9d174d">(Lưu trữ Log tập trung)</text>
+      <rect x="25" y="78" width="185" height="20" rx="5" fill="#fce7f3" stroke="#fbcfe8" stroke-width="1" />
+      <text x="117" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#be185d">Port 3100 (Published Host)</text>
     </g>
 
-    <!-- SERVICE 11: PROMTAIL LOG SHIPPERS -->
-    <g transform="translate(775, 410)" filter="url(#badge-shadow)">
-      <rect x="0" y="0" width="320" height="115" rx="14" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.2" />
-      <!-- Promtail Logo -->
-      <g transform="translate(146, 12)">
-        <rect x="4" y="6" width="6" height="20" rx="1" fill="#d97706" />
-        <rect x="13" y="10" width="6" height="16" rx="1" fill="#f59e0b" />
-        <rect x="22" y="4" width="6" height="22" rx="1" fill="#b45309" />
+    <!-- SERVICE 8: PROMTAIL LOG SHIPPER (Col 3) -->
+    <g transform="translate(610, 365)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="230" height="105" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.2" />
+      <g transform="translate(103, 9)">
+        <rect x="3" y="5" width="5" height="17" rx="1" fill="#d97706" />
+        <rect x="10" y="8" width="5" height="14" rx="1" fill="#f59e0b" />
+        <rect x="17" y="3" width="5" height="19" rx="1" fill="#b45309" />
       </g>
-      <text x="160" y="58" text-anchor="middle" font-size="16" font-weight="800" fill="#b45309">Promtail 3.1</text>
-      <text x="160" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">(Tác nhân thu thập &amp; chuyển Log)</text>
-      <rect x="35" y="85" width="250" height="22" rx="6" fill="#fef3c7" stroke="#fde68a" stroke-width="1" />
-      <text x="160" y="100" text-anchor="middle" font-size="11" font-weight="700" fill="#b45309">Volume: /var/log/nginx &amp; /var/log/app</text>
+      <text x="115" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="#b45309">Promtail 3.1</text>
+      <text x="115" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#92400e">(Tác nhân thu thập Log)</text>
+      <rect x="20" y="78" width="190" height="20" rx="5" fill="#fef3c7" stroke="#fde68a" stroke-width="1" />
+      <text x="115" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#b45309">Volume Log Shipper</text>
     </g>
 
-    <!-- ARROWS FOR ROW 3 -->
-    <!-- cAdvisor -> Prometheus -->
-    <line x1="255" y1="410" x2="255" y2="375" stroke="#0891b2" stroke-width="2" stroke-dasharray="5,4" />
-    <path d="M 255 375 L 500 375 L 500 348" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-dash-blue)" />
-    <!-- Promtail -> Loki (Push logs) -->
-    <line x1="775" y1="467" x2="685" y2="467" stroke="#db2777" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#arrow-dash-blue)" />
-    <rect x="700" y="454" width="65" height="18" rx="4" fill="#fce7f3" stroke="#fbcfe8" stroke-width="1" />
-    <text x="732" y="467" text-anchor="middle" font-size="10" font-weight="700" fill="#be185d">Push Log</text>
+    <!-- LOG VOLUMES STORAGE (Col 4) -->
+    <g transform="translate(905, 365)" filter="url(#badge-shadow)">
+      <rect x="0" y="0" width="240" height="105" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="5,4" stroke-width="1.8" />
+      <g transform="translate(108, 10)">
+        <rect x="0" y="0" width="24" height="18" rx="3" fill="#64748b" />
+        <line x1="4" y1="6" x2="20" y2="6" stroke="#ffffff" stroke-width="1.5" />
+        <line x1="4" y1="12" x2="16" y2="12" stroke="#ffffff" stroke-width="1.5" />
+      </g>
+      <text x="120" y="54" text-anchor="middle" font-size="14.5" font-weight="800" fill="#334155">Docker Log Volumes</text>
+      <text x="120" y="70" text-anchor="middle" font-size="11.5" font-weight="600" fill="#64748b">nginx_logs &amp; app_logs</text>
+      <rect x="25" y="78" width="190" height="20" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" />
+      <text x="120" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#475569">/var/log/nginx &amp; /var/log/app</text>
+    </g>
 
-    <!-- Loki -> Grafana (Query logs) -->
-    <path d="M 450 467 L 300 467 L 300 348" fill="none" stroke="#db2777" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-dash-blue)" />
-    <rect x="320" y="430" width="85" height="18" rx="4" fill="#fff1f2" stroke="#fecdd3" stroke-width="1" />
-    <text x="362" y="443" text-anchor="middle" font-size="10" font-weight="700" fill="#be185d">LogQL Query</text>
+    <!-- ==================== ROW 3 ARROWS ==================== -->
 
-    <!-- Volumes to Promtail (Log source) -->
-    <path d="M 107 168 L 107 555 L 775 555 L 775 510" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="4,4" />
-    <rect x="340" y="545" width="210" height="18" rx="4" fill="#fffbeb" stroke="#fde68a" stroke-width="1" />
-    <text x="445" y="558" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">Đọc file log (/var/log/nginx/access.log &amp; app.log)</text>
+    <!-- cAdvisor -> Prometheus (Up into Prometheus) -->
+    <path d="M 200 365 L 200 340 L 325 340" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-teal)" />
+
+    <!-- Volumes -> Promtail (Horizontal) -->
+    <line x1="905" y1="417" x2="840" y2="417" stroke="#d97706" stroke-width="2" marker-end="url(#arrow-amber)" />
+    <rect x="852" y="398" width="46" height="17" rx="4" fill="#fffbeb" stroke="#fde68a" stroke-width="0.8" />
+    <text x="875" y="410" text-anchor="middle" font-size="9" font-weight="700" fill="#b45309">Đọc log</text>
+
+    <!-- Promtail -> Loki (Horizontal) -->
+    <line x1="610" y1="417" x2="560" y2="417" stroke="#db2777" stroke-width="2.5" marker-end="url(#arrow-pink)" />
+    <rect x="567" y="398" width="46" height="17" rx="4" fill="#fdf2f8" stroke="#fbcfe8" stroke-width="0.8" />
+    <text x="590" y="410" text-anchor="middle" font-size="9" font-weight="700" fill="#be185d">Push</text>
+
+    <!-- Loki -> Grafana (L-shaped path down and up into Grafana, NO OVERLAP) -->
+    <path d="M 442 470 L 442 500 L 1025 500 L 1025 310" fill="none" stroke="#db2777" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-pink)" />
+    <rect x="710" y="490" width="85" height="18" rx="4" fill="#fdf2f8" stroke="#fbcfe8" stroke-width="0.8" />
+    <text x="752" y="503" text-anchor="middle" font-size="9.5" font-weight="700" fill="#be185d">Truy vấn LogQL</text>
+
   </g>
 
   <!-- ==================== BOTTOM PANELS (LEGEND & DETAILS) ==================== -->
   
   <!-- PANEL 1: LUỒNG TRUY CẬP CHÍNH -->
-  <g transform="translate(30, 740)" filter="url(#card-shadow)">
-    <rect x="0" y="0" width="450" height="250" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5" />
-    <rect x="0" y="0" width="450" height="38" rx="14" fill="#eff6ff" />
+  <g transform="translate(30, 680)" filter="url(#card-shadow)">
+    <rect x="0" y="0" width="460" height="310" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5" />
+    <rect x="0" y="0" width="460" height="38" rx="14" fill="#eff6ff" />
     <text x="20" y="25" font-size="14.5" font-weight="700" fill="#1e40af">Luồng truy cập &amp; Giám sát chính</text>
     
-    <g transform="translate(18, 56)" font-size="12" fill="#334155" line-height="1.5">
+    <g transform="translate(20, 58)" font-size="12" fill="#334155">
       <text x="0" y="0" font-weight="700" fill="#2563eb">1.</text>
-      <text x="18" y="0">Người dùng <tspan font-weight="600">HTTPS (443)</tspan> / HTTP 301 <tspan fill="#2563eb">→ Nginx Gateway</tspan></text>
+      <text x="18" y="0">Người dùng truy cập <tspan font-weight="700">HTTPS (Port 443)</tspan> qua Ingress Nginx</text>
       
       <text x="0" y="28" font-weight="700" fill="#2563eb">2.</text>
-      <text x="18" y="28">Nginx Ingress <tspan fill="#2563eb">→ Node.js App (3000)</tspan> &amp; phpMyAdmin <tspan fill="#0284c7">(/pma/)</tspan></text>
+      <text x="18" y="28">Nginx Proxy tới <tspan font-weight="700" fill="#1d4ed8">Node.js (Port 3000)</tspan> &amp; phpMyAdmin <tspan font-weight="700" fill="#0369a1">(/pma/)</tspan></text>
       
       <text x="0" y="56" font-weight="700" fill="#dc2626">3.</text>
-      <text x="18" y="56">Node.js &amp; phpMyAdmin <tspan fill="#dc2626">↔ MySQL 8.4 (3306 - Cô lập)</tspan></text>
+      <text x="18" y="56">Node.js &amp; phpMyAdmin <tspan font-weight="700" fill="#dc2626">kết nối MySQL (3306 - Cô lập)</tspan></text>
       
       <text x="0" y="84" font-weight="700" fill="#7e22ce">4.</text>
-      <text x="18" y="84">Prometheus cào Metrics từ: <tspan font-weight="600">App, MySQL, Nginx, cAdvisor</tspan></text>
+      <text x="18" y="84">Prometheus cào metrics: <tspan font-weight="600">App, MySQL, Nginx, cAdvisor</tspan></text>
       
       <text x="0" y="112" font-weight="700" fill="#d97706">5.</text>
-      <text x="18" y="112">Promtail đọc file log Nginx &amp; App <tspan fill="#d97706">→ Đẩy (Push) về Loki</tspan></text>
+      <text x="18" y="112">Promtail thu thập log file Nginx &amp; App <tspan font-weight="600" fill="#d97706">→ Đẩy về Loki</tspan></text>
 
       <text x="0" y="140" font-weight="700" fill="#ea580c">6.</text>
-      <text x="18" y="140">Grafana (Port 3001) <tspan fill="#ea580c">← Truy vấn Prometheus &amp; Loki</tspan></text>
+      <text x="18" y="140">Grafana <tspan font-weight="700" fill="#ea580c">truy vấn dữ liệu từ Prometheus &amp; Loki</tspan></text>
 
       <text x="0" y="168" font-weight="700" fill="#15803d">7.</text>
-      <text x="18" y="168">Hardening: <tspan font-weight="600">Rate Limiting 429, Non-root UID 1000, Cgroups</tspan></text>
+      <text x="18" y="168">Bảo mật Hardening: <tspan font-weight="600">Rate Limit 429, Non-root UID 1000, Cgroups</tspan></text>
+
+      <text x="0" y="196" font-weight="700" fill="#9333ea">8.</text>
+      <text x="18" y="196">Quản trị viên truy cập: <tspan font-weight="700">Grafana (:3001) &amp; Prometheus (:9090)</tspan></text>
     </g>
   </g>
 
   <!-- PANEL 2: CHÚ THÍCH (LEGEND) -->
-  <g transform="translate(500, 740)" filter="url(#card-shadow)">
-    <rect x="0" y="0" width="440" height="250" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5" />
-    <rect x="0" y="0" width="440" height="38" rx="14" fill="#eff6ff" />
+  <g transform="translate(515, 680)" filter="url(#card-shadow)">
+    <rect x="0" y="0" width="460" height="310" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5" />
+    <rect x="0" y="0" width="460" height="38" rx="14" fill="#eff6ff" />
     <text x="20" y="25" font-size="14.5" font-weight="700" fill="#1e40af">Chú thích quy ước</text>
 
-    <g transform="translate(25, 60)">
+    <g transform="translate(25, 62)">
       <!-- Line 1: Solid arrow -->
-      <line x1="0" y1="10" x2="60" y2="10" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)" />
-      <text x="75" y="14" font-size="12.5" font-weight="600" fill="#1e293b">Lưu lượng truy cập người dùng (HTTP / HTTPS)</text>
+      <line x1="0" y1="10" x2="65" y2="10" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)" />
+      <text x="80" y="14" font-size="12.5" font-weight="600" fill="#1e293b">Lưu lượng truy cập người dùng (HTTP / HTTPS)</text>
 
       <!-- Line 2: Red SQL arrow -->
-      <line x1="0" y1="42" x2="60" y2="42" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrow-blue)" />
-      <text x="75" y="46" font-size="12.5" font-weight="600" fill="#1e293b">Kết nối CSDL nội bộ mạng Backend (Port 3306)</text>
+      <line x1="0" y1="45" x2="65" y2="45" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrow-red)" />
+      <text x="80" y="49" font-size="12.5" font-weight="600" fill="#1e293b">Kết nối CSDL nội bộ mạng Backend (Port 3306)</text>
 
       <!-- Line 3: Dashed arrow metrics/logs -->
-      <line x1="0" y1="74" x2="60" y2="74" stroke="#a855f7" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-dash-blue)" />
-      <text x="75" y="78" font-size="12.5" font-weight="600" fill="#1e293b">Thu thập số liệu giám sát (Metrics Scrape) &amp; Log Push</text>
+      <line x1="0" y1="80" x2="65" y2="80" stroke="#a855f7" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-purple)" />
+      <text x="80" y="84" font-size="12.5" font-weight="600" fill="#1e293b">Thu thập số liệu giám sát (Metrics) &amp; Đẩy Log</text>
 
       <!-- Line 4: Blue dashed border -->
-      <rect x="0" y="100" width="60" height="24" rx="4" fill="#ffffff" stroke="#2563eb" stroke-dasharray="6,4" stroke-width="1.8" />
-      <text x="75" y="116" font-size="12.5" font-weight="600" fill="#1e293b">Môi trường Docker Compose (WSL2 – Ubuntu 24.04)</text>
+      <rect x="0" y="110" width="65" height="26" rx="4" fill="#ffffff" stroke="#2563eb" stroke-dasharray="6,4" stroke-width="1.8" />
+      <text x="80" y="127" font-size="12.5" font-weight="600" fill="#1e293b">Môi trường Docker Compose (WSL2 – Ubuntu 24.04)</text>
 
       <!-- Line 5: Red dashed border -->
-      <rect x="0" y="136" width="60" height="24" rx="4" fill="#fef2f2" stroke="#ef4444" stroke-dasharray="6,4" stroke-width="1.5" />
-      <text x="75" y="152" font-size="12.5" font-weight="600" fill="#b91c1c">Mạng cô lập Backend (internal: true – An toàn CSDL)</text>
+      <rect x="0" y="150" width="65" height="26" rx="4" fill="#fef2f2" stroke="#ef4444" stroke-dasharray="6,4" stroke-width="1.5" />
+      <text x="80" y="167" font-size="12.5" font-weight="600" fill="#b91c1c">Mạng cô lập Backend (internal: true – An toàn CSDL)</text>
     </g>
   </g>
 
   <!-- PANEL 3: 11 DỊCH VỤ TRONG HỆ THỐNG -->
-  <g transform="translate(960, 740)" filter="url(#card-shadow)">
-    <rect x="0" y="0" width="490" height="250" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5" />
+  <g transform="translate(1000, 680)" filter="url(#card-shadow)">
+    <rect x="0" y="0" width="490" height="310" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5" />
     <rect x="0" y="0" width="490" height="38" rx="14" fill="#eff6ff" />
     <text x="20" y="25" font-size="14.5" font-weight="700" fill="#1e40af">Các dịch vụ trong hệ thống (11 services)</text>
 
     <!-- Column 1 -->
-    <g transform="translate(20, 56)" font-size="12" fill="#334155">
-      <text x="0" y="0"><tspan font-weight="700" fill="#15803d">1.</tspan> Nginx 1.27 <tspan fill="#64748b">(Ingress Reverse Proxy)</tspan></text>
-      <text x="0" y="26"><tspan font-weight="700" fill="#1d4ed8">2.</tspan> Node.js App <tspan fill="#64748b">(Titan Fitness Web)</tspan></text>
-      <text x="0" y="52"><tspan font-weight="700" fill="#b91c1c">3.</tspan> MySQL 8.4 LTS <tspan fill="#64748b">(Database Server)</tspan></text>
-      <text x="0" y="78"><tspan font-weight="700" fill="#0369a1">4.</tspan> phpMyAdmin 5.2 <tspan fill="#64748b">(Quản trị CSDL)</tspan></text>
-      <text x="0" y="104"><tspan font-weight="700" fill="#7e22ce">5.</tspan> Prometheus 2.54 <tspan fill="#64748b">(Metrics Server)</tspan></text>
-      <text x="0" y="130"><tspan font-weight="700" fill="#c2410c">6.</tspan> Grafana 11.2 <tspan fill="#64748b">(Bảng điều khiển)</tspan></text>
+    <g transform="translate(20, 58)" font-size="12" fill="#334155">
+      <text x="0" y="0"><tspan font-weight="700" fill="#15803d">1.</tspan> Nginx 1.27 <tspan fill="#64748b">(Ingress Gateway)</tspan></text>
+      <text x="0" y="28"><tspan font-weight="700" fill="#1d4ed8">2.</tspan> Node.js App <tspan fill="#64748b">(Titan Fitness Web)</tspan></text>
+      <text x="0" y="56"><tspan font-weight="700" fill="#b91c1c">3.</tspan> MySQL 8.4 LTS <tspan fill="#64748b">(Database CSDL)</tspan></text>
+      <text x="0" y="84"><tspan font-weight="700" fill="#0369a1">4.</tspan> phpMyAdmin 5.2 <tspan fill="#64748b">(Quản trị CSDL)</tspan></text>
+      <text x="0" y="112"><tspan font-weight="700" fill="#7e22ce">5.</tspan> Prometheus 2.54 <tspan fill="#64748b">(Metrics Server)</tspan></text>
+      <text x="0" y="140"><tspan font-weight="700" fill="#c2410c">6.</tspan> Grafana 11.2 <tspan fill="#64748b">(Dashboard trực quan)</tspan></text>
     </g>
 
     <!-- Column 2 -->
-    <g transform="translate(255, 56)" font-size="12" fill="#334155">
+    <g transform="translate(255, 58)" font-size="12" fill="#334155">
       <text x="0" y="0"><tspan font-weight="700" fill="#be185d">7.</tspan> Loki 3.1 <tspan fill="#64748b">(Lưu trữ Log tập trung)</tspan></text>
-      <text x="0" y="26"><tspan font-weight="700" fill="#b45309">8.</tspan> Promtail 3.1 <tspan fill="#64748b">(Thu thập &amp; đẩy Log)</tspan></text>
-      <text x="0" y="52"><tspan font-weight="700" fill="#0e7490">9.</tspan> cAdvisor 0.49 <tspan fill="#64748b">(Giám sát Container)</tspan></text>
-      <text x="0" y="78"><tspan font-weight="700" fill="#a16207">10.</tspan> MySQL Exporter <tspan fill="#64748b">(Chỉ số CSDL)</tspan></text>
-      <text x="0" y="104"><tspan font-weight="700" fill="#0f766e">11.</tspan> Nginx Exporter <tspan fill="#64748b">(Chỉ số Ingress)</tspan></text>
-      <text x="0" y="130" font-weight="700" fill="#2563eb">→ 100% Tự động hóa qua Compose</text>
+      <text x="0" y="28"><tspan font-weight="700" fill="#b45309">8.</tspan> Promtail 3.1 <tspan fill="#64748b">(Thu thập &amp; chuyển Log)</tspan></text>
+      <text x="0" y="56"><tspan font-weight="700" fill="#0e7490">9.</tspan> cAdvisor 0.49 <tspan fill="#64748b">(Giám sát Container)</tspan></text>
+      <text x="0" y="84"><tspan font-weight="700" fill="#a16207">10.</tspan> MySQL Exporter <tspan fill="#64748b">(Chỉ số CSDL)</tspan></text>
+      <text x="0" y="112"><tspan font-weight="700" fill="#0f766e">11.</tspan> Nginx Exporter <tspan fill="#64748b">(Chỉ số Ingress)</tspan></text>
+      <text x="0" y="140" font-weight="700" fill="#2563eb">→ 100% Tự động hóa qua Compose</text>
     </g>
   </g>
 </svg>
