@@ -1,3 +1,6 @@
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+
 -- ====================================================================
 -- He thong Quan ly Phong Gym / Fitness - Database Schema
 -- De tai 23 - Trien khai va Quan tri He thong Phan mem

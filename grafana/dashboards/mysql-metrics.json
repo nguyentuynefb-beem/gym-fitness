@@ -1,0 +1,311 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "title": "MySQL Status",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "up{job=\"mysql\"}",
+          "legendFormat": "MySQL Up"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "HEALTHY"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 2,
+      "title": "Uptime",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "mysql_global_status_uptime",
+          "legendFormat": "Uptime"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "title": "Connected Clients",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "mysql_global_status_threads_connected",
+          "legendFormat": "Threads Connected"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 4,
+      "title": "Queries / sec",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "rate(mysql_global_status_queries[1m])",
+          "legendFormat": "QPS"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "qps",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 5,
+      "title": "Queries by Command Type (SELECT, INSERT, UPDATE, DELETE)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(mysql_global_status_commands_total{command=\"select\"}[1m])",
+          "legendFormat": "SELECT"
+        },
+        {
+          "expr": "rate(mysql_global_status_commands_total{command=\"insert\"}[1m])",
+          "legendFormat": "INSERT"
+        },
+        {
+          "expr": "rate(mysql_global_status_commands_total{command=\"update\"}[1m])",
+          "legendFormat": "UPDATE"
+        },
+        {
+          "expr": "rate(mysql_global_status_commands_total{command=\"delete\"}[1m])",
+          "legendFormat": "DELETE"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 15
+          },
+          "unit": "ops"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 6,
+      "title": "Active Threads & Connections",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "mysql_global_status_threads_connected",
+          "legendFormat": "Threads Connected"
+        },
+        {
+          "expr": "mysql_global_status_threads_running",
+          "legendFormat": "Threads Running"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line"
+          },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 7,
+      "title": "Network Traffic (Received vs Sent)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(mysql_global_status_bytes_received[1m])",
+          "legendFormat": "Bytes Received"
+        },
+        {
+          "expr": "rate(mysql_global_status_bytes_sent[1m])",
+          "legendFormat": "Bytes Sent"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "Bps"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 8,
+      "title": "InnoDB Buffer Pool Pages",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "mysql_global_status_buffer_pool_pages_data",
+          "legendFormat": "Data Pages"
+        },
+        {
+          "expr": "mysql_global_status_buffer_pool_pages_free",
+          "legendFormat": "Free Pages"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line"
+          },
+          "unit": "short"
+        }
+      }
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [
+    "gym",
+    "mysql",
+    "database"
+  ],
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "title": "MySQL Database Performance",
+  "uid": "titan-gym-mysql"
+}

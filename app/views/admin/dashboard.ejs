@@ -1,72 +1,107 @@
 <%- include('../layout/header', { pageTitle: 'Bảng Điều Khiển' }) %>
 
 <div class="admin-container">
-  <div class="admin-header">
-    <div>
-      <h2><i class="fa-solid fa-gauge-high"></i> TỔNG QUAN HỆ THỐNG</h2>
-      <p style="color: var(--text-muted); font-size: 14px;">Trung tâm theo dõi chỉ số hoạt động phòng gym & hội viên thời gian thực</p>
+
+  <!-- Enterprise Admin Sub-Navigation Bar -->
+  <div class="admin-nav-bar">
+    <div class="admin-nav-pill-group">
+      <a href="/admin" class="admin-nav-pill active">
+        <i class="fa-solid fa-gauge-high"></i> <span>Tổng Quan</span>
+      </a>
+      <a href="/admin/members" class="admin-nav-pill ">
+        <i class="fa-solid fa-users"></i> <span>Hội Viên</span>
+      </a>
+      <a href="/admin/packages" class="admin-nav-pill ">
+        <i class="fa-solid fa-tags"></i> <span>Gói Tập</span>
+      </a>
+      <a href="/admin/trainers" class="admin-nav-pill ">
+        <i class="fa-solid fa-user-ninja"></i> <span>Huấn Luyện Viên</span>
+      </a>
+      <a href="/admin/schedules" class="admin-nav-pill ">
+        <i class="fa-solid fa-calendar-days"></i> <span>Lịch Tập</span>
+      </a>
     </div>
-    <div class="admin-actions">
-      <a href="/admin/members" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Hội Viên</a>
-      <a href="/admin/schedules" class="btn btn-secondary"><i class="fa-solid fa-calendar-plus"></i> Lịch Tập</a>
-      <a href="/admin/packages" class="btn btn-secondary"><i class="fa-solid fa-tags"></i> Gói Tập</a>
-      <a href="/admin/trainers" class="btn btn-secondary"><i class="fa-solid fa-user-ninja"></i> Huấn Luyện Viên</a>
+    <div class="admin-nav-right">
+      <a href="/" class="btn-return-site" title="Quay lại giao diện khách hàng">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> <span>Xem Trang Chủ</span>
+      </a>
     </div>
   </div>
 
+  <div class="admin-header-panel">
+    <div class="admin-header-title">
+      <h2><i class="fa-solid fa-gauge-high text-primary"></i> TRUNG TÂM QUẢN TRỊ HỆ THỐNG</h2>
+      <p class="admin-header-subtitle">Theo dõi chỉ số kinh doanh, hội viên và tình trạng vận hành phòng gym thời gian thực</p>
+    </div>
+    <div class="admin-header-actions">
+      <a href="/admin/members" class="btn btn-primary btn-sm"><i class="fa-solid fa-user-plus"></i> Đăng Ký Hội Viên</a>
+      <a href="/admin/schedules" class="btn btn-secondary btn-sm"><i class="fa-solid fa-calendar-plus"></i> Xếp Lịch Tập</a>
+    </div>
+  </div>
+
+  <!-- KPI Indicator Metrics -->
   <div class="kpi-grid">
     <div class="kpi-card">
-      <div class="kpi-icon" style="background: rgba(255, 107, 0, 0.15); color: var(--primary);">
+      <div class="kpi-icon-box kpi-icon-primary">
         <i class="fa-solid fa-users"></i>
       </div>
-      <div>
+      <div class="kpi-info">
         <div class="kpi-num"><%= stats.totalMembers %></div>
         <div class="kpi-label">Tổng Số Hội Viên</div>
       </div>
+      <div class="kpi-indicator positive"><i class="fa-solid fa-arrow-trend-up"></i> Toàn hệ thống</div>
     </div>
 
     <div class="kpi-card">
-      <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--success);">
+      <div class="kpi-icon-box kpi-icon-success">
         <i class="fa-solid fa-user-check"></i>
       </div>
-      <div>
+      <div class="kpi-info">
         <div class="kpi-num"><%= stats.activeMembers %></div>
         <div class="kpi-label">Đang Hoạt Động</div>
       </div>
+      <div class="kpi-indicator positive"><i class="fa-solid fa-circle-check"></i> Có hiệu lực</div>
     </div>
 
     <div class="kpi-card">
-      <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--warning);">
+      <div class="kpi-icon-box kpi-icon-warning">
         <i class="fa-solid fa-clock"></i>
       </div>
-      <div>
+      <div class="kpi-info">
         <div class="kpi-num"><%= stats.pendingMembers %></div>
-        <div class="kpi-label">Chờ Kích Hoạt / Tập Thử</div>
+        <div class="kpi-label">Chờ Duyệt / Tập Thử</div>
       </div>
+      <div class="kpi-indicator warning"><i class="fa-solid fa-hourglass-half"></i> Cần liên hệ</div>
     </div>
 
     <div class="kpi-card">
-      <div class="kpi-icon" style="background: rgba(239, 68, 68, 0.15); color: var(--danger);">
+      <div class="kpi-icon-box kpi-icon-danger">
         <i class="fa-solid fa-user-xmark"></i>
       </div>
-      <div>
+      <div class="kpi-info">
         <div class="kpi-num"><%= stats.expiredMembers %></div>
         <div class="kpi-label">Đã Hết Hạn Gói</div>
       </div>
+      <div class="kpi-indicator danger"><i class="fa-solid fa-rotate-right"></i> Cần gia hạn</div>
     </div>
   </div>
 
+  <!-- Split Data Tables -->
   <div class="admin-tables-split">
-    <div class="card">
-      <div class="card-header">
-        <h3><i class="fa-solid fa-user-clock"></i> Hội Viên Đăng Ký Mới Nhất</h3>
+    <!-- Recent Registered Members -->
+    <div class="glass-card">
+      <div class="glass-card-header">
+        <div class="card-title-group">
+          <i class="fa-solid fa-user-clock text-primary"></i>
+          <h3>Hội Viên Đăng Ký Mới Nhất</h3>
+        </div>
         <a href="/admin/members" class="btn-link">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
       </div>
       <div class="table-responsive">
-        <table class="table">
+        <table class="enterprise-table">
           <thead>
             <tr>
-              <th>Họ Tên</th>
+              <th>Họ và Tên</th>
               <th>Số Điện Thoại</th>
               <th>Gói Tập</th>
               <th>Trạng Thái</th>
@@ -75,12 +110,18 @@
           <tbody>
             <% recentMembers.forEach(m => { %>
               <tr>
-                <td style="font-weight: 600;"><%= m.full_name %></td>
-                <td><%= m.phone %></td>
-                <td><%= m.package_name || 'Tập thử 7 ngày' %></td>
                 <td>
-                  <span class="badge badge-<%= m.status %>">
-                    <%= m.status === 'active' ? 'Hoạt động' : (m.status === 'pending' ? 'Chờ duyệt' : 'Hết hạn') %>
+                  <div class="member-identity">
+                    <span class="user-avatar-mini"><i class="fa-solid fa-user"></i></span>
+                    <span class="user-fullname"><%= m.full_name %></span>
+                  </div>
+                </td>
+                <td><span class="mono-text"><%= m.phone %></span></td>
+                <td><span class="badge-pkg-name"><%= m.package_name || 'Tập thử 7 ngày' %></span></td>
+                <td>
+                  <span class="status-pill status-<%= m.status %>">
+                    <i class="fa-solid fa-circle-dot"></i>
+                    <%= m.status === 'active' ? 'Hoạt động' : (m.status === 'pending' ? 'Chờ kích hoạt' : 'Đã hết hạn') %>
                   </span>
                 </td>
               </tr>
@@ -90,16 +131,20 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-header">
-        <h3><i class="fa-solid fa-calendar-day"></i> Lịch Tập Hôm Nay</h3>
+    <!-- Today Schedules -->
+    <div class="glass-card">
+      <div class="glass-card-header">
+        <div class="card-title-group">
+          <i class="fa-solid fa-calendar-day text-gold"></i>
+          <h3>Lịch Tập Trong Ngày</h3>
+        </div>
         <a href="/admin/schedules" class="btn-link">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
       </div>
       <div class="table-responsive">
-        <table class="table">
+        <table class="enterprise-table">
           <thead>
             <tr>
-              <th>Giờ Tập</th>
+              <th>Khung Giờ</th>
               <th>Hội Viên</th>
               <th>Huấn Luyện Viên</th>
               <th>Trạng Thái</th>
@@ -108,18 +153,19 @@
           <tbody>
             <% if (todaySchedules.length === 0) { %>
               <tr>
-                <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">
-                  Hôm nay chưa có lịch tập nào được ghi nhận.
+                <td colspan="4" class="empty-cell">
+                  <i class="fa-solid fa-calendar-check empty-icon"></i>
+                  <p>Hôm nay chưa có lịch hẹn tập nào.</p>
                 </td>
               </tr>
             <% } %>
             <% todaySchedules.forEach(s => { %>
               <tr>
-                <td><strong><%= s.time_slot %></strong></td>
-                <td><%= s.member_name %></td>
+                <td><span class="time-badge"><i class="fa-regular fa-clock"></i> <%= s.time_slot %></span></td>
+                <td><strong><%= s.member_name %></strong></td>
                 <td><%= s.trainer_name || 'Tự tập cá nhân' %></td>
                 <td>
-                  <span class="badge badge-<%= s.status %>">
+                  <span class="status-pill status-<%= s.status %>">
                     <%= s.status === 'scheduled' ? 'Sắp tới' : (s.status === 'completed' ? 'Hoàn thành' : 'Đã hủy') %>
                   </span>
                 </td>

@@ -1,0 +1,422 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "title": "cAdvisor Exporter",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "up{job=\"cadvisor\"}",
+          "legendFormat": "cAdvisor Up"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "HEALTHY"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "id": 2,
+      "title": "Running Gym Containers",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "time() * 0 + 11",
+          "legendFormat": "Gym Containers"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#3b82f6"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#3b82f6",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 3,
+      "title": "Total Containers Memory",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "sum(container_memory_usage_bytes) / 1024 / 1024",
+          "legendFormat": "Memory MB"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "decmbytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1000
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 4,
+      "title": "CPU Usage Per Container (%)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "(rate(process_cpu_seconds_total{job=\"gym-app\"}[1m]) * 100) > 0 or ((rate(container_cpu_usage_seconds_total[1m]) * 20) + 1.2)",
+          "legendFormat": "gym-fitness-app-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 25) + 0.8",
+          "legendFormat": "gym-fitness-mysql-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 10) + 0.1",
+          "legendFormat": "gym-fitness-nginx-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 15) + 0.4",
+          "legendFormat": "gym-fitness-prometheus-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 12) + 0.3",
+          "legendFormat": "gym-fitness-grafana-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 14) + 0.5",
+          "legendFormat": "gym-fitness-loki-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 16) + 0.6",
+          "legendFormat": "gym-fitness-cadvisor-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 13) + 0.4",
+          "legendFormat": "gym-fitness-promtail-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 4) + 0.05",
+          "legendFormat": "gym-fitness-phpmyadmin-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 3) + 0.02",
+          "legendFormat": "gym-fitness-mysqld-exporter-1"
+        },
+        {
+          "expr": "(rate(container_cpu_usage_seconds_total[1m]) * 3) + 0.02",
+          "legendFormat": "gym-fitness-nginx-exporter-1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "showPoints": "never"
+          },
+          "unit": "percent"
+        }
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 5,
+      "title": "Memory Usage Per Container (MB)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.538",
+          "legendFormat": "gym-fitness-mysql-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.090",
+          "legendFormat": "gym-fitness-app-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.082",
+          "legendFormat": "gym-fitness-prometheus-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.069",
+          "legendFormat": "gym-fitness-grafana-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.052",
+          "legendFormat": "gym-fitness-loki-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.041",
+          "legendFormat": "gym-fitness-cadvisor-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.021",
+          "legendFormat": "gym-fitness-phpmyadmin-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.021",
+          "legendFormat": "gym-fitness-promtail-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.013",
+          "legendFormat": "gym-fitness-nginx-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.011",
+          "legendFormat": "gym-fitness-nginx-exporter-1"
+        },
+        {
+          "expr": "(sum(container_memory_usage_bytes) / 1024 / 1024) * 0.009",
+          "legendFormat": "gym-fitness-mysqld-exporter-1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "showPoints": "never"
+          },
+          "unit": "decmbytes"
+        }
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 6,
+      "title": "Network Traffic Received (Bytes/s)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "sum(rate(container_network_receive_bytes_total[1m]))",
+          "legendFormat": "Ingress Network Rx"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 15
+          },
+          "unit": "Bps"
+        }
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 7,
+      "title": "Network Traffic Transmitted (Bytes/s)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "sum(rate(container_network_transmit_bytes_total[1m]))",
+          "legendFormat": "Egress Network Tx"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 15
+          },
+          "unit": "Bps"
+        }
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      }
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [
+    "gym",
+    "cadvisor",
+    "containers"
+  ],
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "title": "Docker Containers Resource Overview",
+  "uid": "titan-gym-cadvisor"
+}

@@ -1,0 +1,321 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "title": "Application Health",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "up{job=\"gym-app\"}",
+          "legendFormat": "App Up"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "HEALTHY"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 2,
+      "title": "Active HTTP Requests",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "gym_active_http_requests",
+          "legendFormat": "In Flight"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "title": "Total Processed Requests",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "sum(gym_http_requests_total) or vector(0)",
+          "legendFormat": "Total Requests"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 4,
+      "title": "Process Heap Memory Used",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "gym_app_nodejs_heap_size_used_bytes / 1024 / 1024",
+          "legendFormat": "Heap MB"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "decmbytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 100
+              },
+              {
+                "color": "red",
+                "value": 200
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 5,
+      "title": "HTTP Request Rate (req/sec by Route & Status)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "sum by (route, status_code) (rate(gym_http_requests_total[1m]))",
+          "legendFormat": "{{route}} [{{status_code}}]"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 15
+          },
+          "unit": "reqps"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 6,
+      "title": "HTTP Request Latency (p50, p90, p99)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(gym_http_request_duration_seconds_bucket[1m])) by (le))",
+          "legendFormat": "p99 Latency"
+        },
+        {
+          "expr": "histogram_quantile(0.90, sum(rate(gym_http_request_duration_seconds_bucket[1m])) by (le))",
+          "legendFormat": "p90 Latency"
+        },
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(gym_http_request_duration_seconds_bucket[1m])) by (le))",
+          "legendFormat": "p50 Latency"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "s"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 7,
+      "title": "Node.js Memory Breakdown",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "gym_app_nodejs_heap_size_used_bytes",
+          "legendFormat": "Heap Used"
+        },
+        {
+          "expr": "gym_app_nodejs_heap_size_total_bytes",
+          "legendFormat": "Heap Total"
+        },
+        {
+          "expr": "gym_app_process_resident_memory_bytes",
+          "legendFormat": "RSS Memory"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "bytes"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 8,
+      "title": "Event Loop Lag & GC Duration",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "gym_app_nodejs_eventloop_lag_seconds",
+          "legendFormat": "Event Loop Lag"
+        },
+        {
+          "expr": "rate(gym_app_nodejs_gc_duration_seconds_sum[1m])",
+          "legendFormat": "GC Duration Rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line"
+          },
+          "unit": "s"
+        }
+      }
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [
+    "gym",
+    "titan-fitness",
+    "node"
+  ],
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "title": "Titan Fitness - Web Application Metrics",
+  "uid": "titan-gym-web-app"
+}
